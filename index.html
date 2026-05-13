@@ -200,6 +200,7 @@
       display: flex;
       flex-direction: column;
       line-height: 1.2;
+      min-width: 0;
     }
     .logo-name {
       font-family: var(--font-display);
@@ -207,12 +208,14 @@
       font-weight: 700;
       color: var(--navy);
       letter-spacing: -0.01em;
+      white-space: nowrap;
     }
     .logo-name-hindi {
       font-size: 12px;
       color: var(--ink-lt);
       font-family: var(--font-body);
       font-weight: 400;
+      white-space: nowrap;
     }
     .logo-sub {
       font-size: 10px;
@@ -221,6 +224,7 @@
       color: var(--saffron);
       font-weight: 600;
       margin-top: 2px;
+      white-space: nowrap;
     }
 
     /* ─── Primary Nav ────────────────────────────────────────── */
@@ -982,11 +986,15 @@
     }
 
     /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .logo-name-hindi { display: none; }
+    }
     @media (max-width: 1024px) {
       .ql-grid { grid-template-columns: repeat(3, 1fr); }
       .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
     }
 
+    .drawer-nav-list a svg { width: 10px; height: 10px; flex-shrink: 0; }
     @media (max-width: 768px) {
       .util-bar .container { display: none; }
       .header-inner {
@@ -997,6 +1005,8 @@
       .primary-nav { display: none; }
       .search-form { display: none; }
       .nav-toggle { display: flex; }
+      .logo-name { font-size: 14px; }
+      .logo-sub { display: none; }
 
       h1.hero-title { font-size: 30px; }
       .hero-stats { gap: var(--space-5); }
