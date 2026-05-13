@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — MDSU Ajmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: var(--space-8);
+      padding-block: var(--space-8);
+      align-items: start;
+    }
+
+    /* Form card */
+    .contact-form-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .contact-form-head {
+      background: var(--navy);
+      padding: var(--space-5) var(--space-6);
+    }
+    .contact-form-head h2 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .contact-form-head p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+    }
+    .contact-form-body { padding: var(--space-6); }
+
+    .form-row { margin-bottom: var(--space-5); }
+    .form-row label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .form-row label .req { color: var(--saffron); margin-left: 2px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--ink);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--navy);
+    }
+    .form-textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      min-height: 48px;
+    }
+    .form-submit:hover { background: var(--navy-dark); }
+
+    .form-success {
+      text-align: center;
+      padding: var(--space-8) var(--space-6);
+    }
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      background: #E8F5E9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-4);
+      font-size: 24px;
+    }
+    .success-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: var(--space-3);
+    }
+    .success-msg { font-size: 15px; color: var(--ink-mid); line-height: 1.6; }
+
+    /* Sidebar */
+    .contact-sidebar {}
+    .contact-widget {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: var(--space-5);
+    }
+    .contact-widget-head {
+      background: var(--navy);
+      padding: var(--space-4) var(--space-5);
+    }
+    .contact-widget-head h3 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .contact-widget-body { padding: var(--space-4) var(--space-5); }
+
+    .contact-dept {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: var(--space-2);
+      padding-block: var(--space-3);
+      border-bottom: 1px solid var(--rule);
+    }
+    .contact-dept:last-child { border-bottom: none; }
+    .contact-dept-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .contact-dept-phone { font-size: 13px; color: var(--navy); text-decoration: none; white-space: nowrap; }
+    .contact-dept-phone:hover { text-decoration: underline; }
+
+    .address-block {
+      font-size: 14px;
+      color: var(--ink-mid);
+      line-height: 1.8;
+    }
+    .address-block strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+    .map-placeholder {
+      background: var(--cream);
+      border-radius: 8px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: var(--space-2);
+      color: var(--ink-lt);
+      font-size: 13px;
+      border: 1px dashed var(--rule);
+      margin-top: var(--space-4);
+    }
+    .map-placeholder svg { width: 28px; height: 28px; color: var(--ink-lt); }
+
+    @media (max-width: 900px) {
+      .contact-layout { grid-template-columns: 1fr; }
+      .form-2col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="util-bar">
+    <div class="container">
+      <div class="util-bar__left">
+        <span class="util-date">Wednesday, 13 May 2026</span>
+        <a href="index.html">Home</a>
+        <a href="#">Library</a>
+        <a href="contact.html">Contacts</a>
+      </div>
+      <div class="util-bar__right">
+        <div class="util-a11y" aria-label="Text size">
+          <a href="#" aria-label="Decrease text size">A-</a>
+          <a href="#" aria-label="Default text size">A</a>
+          <a href="#" aria-label="Increase text size">A+</a>
+        </div>
+        <div class="lang-toggle">
+          <a href="#" class="active">EN</a>
+          <a href="#">हि</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="site-logo" aria-label="MDSU — Home">
+          <div class="logo-emblem" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+          <div class="logo-text-group">
+            <span class="logo-name">Maharshi Dayanand Saraswati</span>
+            <span class="logo-name-hindi">महर्षि दयानंद सरस्वती विश्वविद्यालय</span>
+            <span class="logo-sub">University, Ajmer · Est. 1987</span>
+          </div>
+        </a>
+        <nav aria-label="Primary">
+          <ul class="primary-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="about.html">Vision &amp; Mission</a></li><li><a href="faculty.html">Faculty</a></li><li><a href="about.html">Administration</a></li></ul>
+            </li>
+            <li><a href="#">Academics <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="#">Academic Programs</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Academic Calendar</a></li></ul>
+            </li>
+            <li><a href="admissions.html">Students <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li><li><a href="downloads.html">Downloads</a></li></ul>
+            </li>
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <form class="search-form" role="search" action="search.html">
+            <input class="search-input" type="search" name="q" placeholder="Search…" aria-label="Search" />
+            <button class="search-btn" type="submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+            </button>
+          </form>
+          <button id="dark-mode-toggle" aria-label="Toggle dark mode" aria-pressed="false" style="background:none;border:1.5px solid var(--rule);border-radius:20px;padding:8px 12px;cursor:pointer;font-size:16px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;color:var(--ink-mid);transition:border-color 0.2s;">
+            <span class="dm-icon">&#9790;</span>
+          </button>
+          <a href="#" class="btn-login">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="4" r="2.5"/><path d="M1 12c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            Login
+          </a>
+          <button class="nav-toggle" aria-label="Open menu">
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span aria-current="page">Contact Us</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="page-hero" aria-labelledby="page-heading">
+    <div class="container page-hero-content">
+      <p class="page-hero-eyebrow">Get in Touch</p>
+      <h1 class="page-title" id="page-heading">Contact Us</h1>
+      <p class="page-hero-desc">Reach out with enquiries, grievances, or feedback. We respond within 3 working days.</p>
+    </div>
+  </section>
+
+  <main style="background: var(--cream);">
+    <div class="container">
+      <div class="contact-layout">
+
+        <!-- Form -->
+        <div class="contact-form-card">
+          <div class="contact-form-head">
+            <h2>Send a Message</h2>
+            <p>All fields marked with * are required.</p>
+          </div>
+          <div class="contact-form-body" id="form-container">
+            <form id="contact-form" novalidate>
+              <div class="form-2col">
+                <div class="form-row">
+                  <label for="cf-name">Full Name <span class="req">*</span></label>
+                  <input class="form-input" type="text" id="cf-name" name="name" placeholder="Your full name" required autocomplete="name" />
+                </div>
+                <div class="form-row">
+                  <label for="cf-email">Email Address <span class="req">*</span></label>
+                  <input class="form-input" type="email" id="cf-email" name="email" placeholder="you@example.com" required autocomplete="email" />
+                </div>
+              </div>
+              <div class="form-row">
+                <label for="cf-category">Category <span class="req">*</span></label>
+                <select class="form-select" id="cf-category" name="category" required>
+                  <option value="" disabled selected>Select a category</option>
+                  <option>General Enquiry</option>
+                  <option>Admissions</option>
+                  <option>Examinations</option>
+                  <option>Affiliation</option>
+                  <option>Grievance</option>
+                  <option>RTI</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="cf-subject">Subject <span class="req">*</span></label>
+                <input class="form-input" type="text" id="cf-subject" name="subject" placeholder="Brief subject of your message" required />
+              </div>
+              <div class="form-row">
+                <label for="cf-message">Message <span class="req">*</span></label>
+                <textarea class="form-textarea" id="cf-message" name="message" placeholder="Describe your query or grievance in detail…" required></textarea>
+              </div>
+              <button type="submit" class="form-submit">Send Message</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="contact-sidebar">
+
+          <div class="contact-widget">
+            <div class="contact-widget-head">
+              <h3>Department Contacts</h3>
+            </div>
+            <div class="contact-widget-body">
+              <div class="contact-dept">
+                <span class="contact-dept-name">Vice Chancellor's Office</span>
+                <a href="tel:+911452787056" class="contact-dept-phone">+91-145-2787056</a>
+              </div>
+              <div class="contact-dept">
+                <span class="contact-dept-name">Registrar</span>
+                <a href="tel:+911452787001" class="contact-dept-phone">+91-145-2787001</a>
+              </div>
+              <div class="contact-dept">
+                <span class="contact-dept-name">Controller of Examinations</span>
+                <a href="tel:+911452787010" class="contact-dept-phone">+91-145-2787010</a>
+              </div>
+              <div class="contact-dept">
+                <span class="contact-dept-name">Admissions Cell</span>
+                <a href="tel:+911452787020" class="contact-dept-phone">+91-145-2787020</a>
+              </div>
+              <div class="contact-dept">
+                <span class="contact-dept-name">Affiliation Cell</span>
+                <a href="tel:+911452787030" class="contact-dept-phone">+91-145-2787030</a>
+              </div>
+              <div class="contact-dept">
+                <span class="contact-dept-name">Central Library</span>
+                <a href="tel:+911452787040" class="contact-dept-phone">+91-145-2787040</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-widget">
+            <div class="contact-widget-head">
+              <h3>University Address</h3>
+            </div>
+            <div class="contact-widget-body">
+              <address class="address-block">
+                <strong>Maharshi Dayanand Saraswati University</strong>
+                Pushkar Road, Ajmer<br/>
+                Rajasthan – 305009<br/>
+                India
+              </address>
+              <div class="map-placeholder" aria-label="Map placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                <span>Pushkar Road, Ajmer 305009</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-widget">
+            <div class="contact-widget-head">
+              <h3>Working Hours</h3>
+            </div>
+            <div class="contact-widget-body">
+              <div class="contact-dept">
+                <span class="contact-dept-name">Monday – Friday</span>
+                <span style="font-size:13px;color:var(--ink-mid);">10:00 – 17:00</span>
+              </div>
+              <div class="contact-dept">
+                <span class="contact-dept-name">Saturday</span>
+                <span style="font-size:13px;color:var(--ink-mid);">10:00 – 14:00</span>
+              </div>
+              <div class="contact-dept">
+                <span class="contact-dept-name">Sunday &amp; Holidays</span>
+                <span style="font-size:13px;color:#C62828;">Closed</span>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-emblem" style="width:40px;height:40px;font-size:13px;" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--white);line-height:1.2;">MDS University</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Ajmer, Rajasthan</div>
+            </div>
+          </div>
+          <p class="footer-tagline">Shaping Minds, Building Futures since 1987.</p>
+          <address class="footer-address">
+            Pushkar Road, Ajmer<br/>
+            Rajasthan – 305009<br/>
+            <a href="tel:+911452787056">+91-145-278-7056</a>
+          </address>
+        </div>
+        <div>
+          <h3 class="footer-heading">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About MDSU</a></li>
+            <li><a href="admissions.html">Admissions</a></li>
+            <li><a href="exams.html">Exams &amp; Results</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Students</h3>
+          <ul class="footer-links">
+            <li><a href="admissions.html">Apply Now</a></li>
+            <li><a href="exams.html">Check Results</a></li>
+            <li><a href="#">Scholarships</a></li>
+            <li><a href="#">Academic Calendar</a></li>
+            <li><a href="#">Fee Structure</a></li>
+            <li><a href="#">Hostel</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">University</h3>
+          <ul class="footer-links">
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+            <li><a href="#">IQAC</a></li>
+            <li><a href="#">RTI</a></li>
+            <li><a href="#">Tenders</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Maharshi Dayanand Saraswati University, Ajmer. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const container = document.getElementById('form-container');
+      const successDiv = document.createElement('div');
+      successDiv.className = 'form-success';
+
+      const icon = document.createElement('div');
+      icon.className = 'success-icon';
+      icon.textContent = '✓';
+      icon.style.color = '#2E7D32';
+
+      const title = document.createElement('h3');
+      title.className = 'success-title';
+      title.textContent = 'Message Sent';
+
+      const msg = document.createElement('p');
+      msg.className = 'success-msg';
+      msg.textContent = 'Your message has been submitted. We will respond within 3 working days.';
+
+      successDiv.append(icon, title, msg);
+      container.replaceChildren(successDiv);
+    });
+  </script>
+</body>
+</html>

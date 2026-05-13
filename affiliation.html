@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Affiliation — MDSU Ajmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .aff-layout { padding-block: var(--space-8); }
+
+    /* Info cards */
+    .aff-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+      margin-bottom: var(--space-8);
+    }
+    .aff-info-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: var(--space-5);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .aff-info-card:hover { border-color: var(--navy); box-shadow: 0 4px 16px rgba(7,48,106,0.08); }
+    .aff-card-icon {
+      width: 44px; height: 44px;
+      background: var(--navy);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: var(--space-4);
+      color: var(--white);
+    }
+    .aff-card-icon svg { width: 22px; height: 22px; }
+    .aff-card-title {
+      font-family: var(--font-display);
+      font-size: 18px; font-weight: 600; color: var(--ink);
+      margin-bottom: var(--space-2);
+    }
+    .aff-card-desc { font-size: 13px; color: var(--ink-mid); line-height: 1.6; margin-bottom: var(--space-4); }
+    .aff-card-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 13px; font-weight: 600; color: var(--navy);
+      text-decoration: none; transition: gap 0.15s;
+    }
+    .aff-card-link:hover { gap: 8px; }
+
+    /* Filter row */
+    .aff-filter-row {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding: var(--space-4) var(--space-5);
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+    }
+    .aff-filter-label { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-lt); flex-shrink: 0; }
+    .aff-select {
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-body); font-size: 13px;
+      color: var(--ink); background: var(--white);
+      outline: none; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .aff-select:focus { border-color: var(--navy); }
+    .aff-search {
+      flex: 1; min-width: 200px;
+      display: flex; align-items: center;
+      border: 1.5px solid var(--rule); border-radius: 8px;
+      overflow: hidden; transition: border-color 0.2s;
+      background: var(--white);
+    }
+    .aff-search:focus-within { border-color: var(--navy); }
+    .aff-search input {
+      flex: 1; border: none; outline: none; padding: 8px 12px;
+      font-family: var(--font-body); font-size: 13px;
+      color: var(--ink); background: transparent;
+    }
+    .aff-search svg { margin-right: 10px; color: var(--ink-lt); flex-shrink: 0; }
+
+    /* Results count */
+    #aff-count { font-size: 13px; color: var(--ink-lt); margin-bottom: var(--space-4); }
+
+    /* College table */
+    .aff-table-wrap {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .aff-table { width: 100%; border-collapse: collapse; }
+    .aff-table thead { background: var(--navy); }
+    .aff-table th {
+      padding: 12px 16px; text-align: left;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.8);
+    }
+    .aff-table td {
+      padding: 13px 16px; font-size: 13px; color: var(--ink);
+      border-bottom: 1px solid var(--rule); vertical-align: middle;
+    }
+    .aff-table tr:last-child td { border-bottom: none; }
+    .aff-table tr:hover td { background: var(--cream); }
+    .aff-table tr[hidden] { display: none; }
+
+    .aff-college-name { font-weight: 500; }
+    .aff-type-badge {
+      display: inline-block; padding: 3px 9px;
+      border-radius: 20px; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .aff-type-badge--govt { background: #E3F2FD; color: #1565C0; }
+    .aff-type-badge--pvt { background: var(--saffron-bg); color: #7A4E00; }
+    .aff-programmes { font-size: 12px; color: var(--ink-lt); }
+
+    .aff-empty { text-align: center; padding: 48px; color: var(--ink-lt); font-size: 14px; }
+
+    @media (max-width: 860px) {
+      .aff-cards { grid-template-columns: 1fr; }
+      .aff-filter-row { flex-direction: column; align-items: stretch; }
+    }
+    @media (max-width: 600px) {
+      .aff-table th:nth-child(4), .aff-table td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="util-bar">
+    <div class="container">
+      <div class="util-bar__left">
+        <span class="util-date">Wednesday, 13 May 2026</span>
+        <a href="index.html">Home</a>
+        <a href="#">Library</a>
+        <a href="contact.html">Contacts</a>
+      </div>
+      <div class="util-bar__right">
+        <div class="util-a11y" aria-label="Text size">
+          <a href="#" aria-label="Decrease text size">A-</a>
+          <a href="#" aria-label="Default text size">A</a>
+          <a href="#" aria-label="Increase text size">A+</a>
+        </div>
+        <div class="lang-toggle">
+          <a href="#" class="active">EN</a>
+          <a href="#">हि</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="site-logo" aria-label="MDSU — Home">
+          <div class="logo-emblem" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+          <div class="logo-text-group">
+            <span class="logo-name">Maharshi Dayanand Saraswati</span>
+            <span class="logo-name-hindi">महर्षि दयानंद सरस्वती विश्वविद्यालय</span>
+            <span class="logo-sub">University, Ajmer · Est. 1987</span>
+          </div>
+        </a>
+        <nav aria-label="Primary">
+          <ul class="primary-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="about.html">Vision &amp; Mission</a></li><li><a href="faculty.html">Faculty</a></li><li><a href="about.html">Administration</a></li></ul>
+            </li>
+            <li><a href="#">Academics <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="#">Academic Programs</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Academic Calendar</a></li></ul>
+            </li>
+            <li><a href="admissions.html">Students <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li><li><a href="downloads.html">Downloads</a></li></ul>
+            </li>
+            <li><a href="affiliation.html" class="active">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <form class="search-form" role="search" action="search.html">
+            <input class="search-input" type="search" name="q" placeholder="Search…" aria-label="Search" />
+            <button class="search-btn" type="submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+            </button>
+          </form>
+          <button id="dark-mode-toggle" aria-label="Toggle dark mode" aria-pressed="false" style="background:none;border:1.5px solid var(--rule);border-radius:20px;padding:8px 12px;cursor:pointer;font-size:16px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;color:var(--ink-mid);transition:border-color 0.2s;">
+            <span class="dm-icon">&#9790;</span>
+          </button>
+          <a href="#" class="btn-login">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="4" r="2.5"/><path d="M1 12c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            Login
+          </a>
+          <button class="nav-toggle" aria-label="Open menu">
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span aria-current="page">Affiliation</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="page-hero" aria-labelledby="page-heading">
+    <div class="container page-hero-content">
+      <p class="page-hero-eyebrow">College Network</p>
+      <h1 class="page-title" id="page-heading">Affiliation</h1>
+      <p class="page-hero-desc">MDSU affiliates 600+ colleges across Ajmer, Nagaur, Bhilwara, and Tonk districts. Find affiliation procedures and browse affiliated colleges.</p>
+    </div>
+  </section>
+
+  <main style="background: var(--cream);">
+    <div class="container">
+      <div class="aff-layout">
+
+        <!-- Info cards -->
+        <div class="aff-cards">
+          <div class="aff-info-card">
+            <div class="aff-card-icon">
+              <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="18" height="16" rx="2"/><path d="M7 8h8M7 12h5"/></svg>
+            </div>
+            <h2 class="aff-card-title">New Affiliation</h2>
+            <p class="aff-card-desc">Apply for fresh affiliation for a new college. Download the application form and submit with required documents.</p>
+            <a href="downloads.html#cat-affiliation" class="aff-card-link">Download Form <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" width="12" height="12"><path d="M1 5h8M5 1l4 4-4 4"/></svg></a>
+          </div>
+          <div class="aff-info-card">
+            <div class="aff-card-icon">
+              <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11l5 5L18 6"/><circle cx="11" cy="11" r="9"/></svg>
+            </div>
+            <h2 class="aff-card-title">Renewal</h2>
+            <p class="aff-card-desc">Renew existing affiliation annually. Submit renewal form with inspection report and fee before the deadline.</p>
+            <a href="downloads.html#cat-affiliation" class="aff-card-link">Download Form <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" width="12" height="12"><path d="M1 5h8M5 1l4 4-4 4"/></svg></a>
+          </div>
+          <div class="aff-info-card">
+            <div class="aff-card-icon">
+              <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 2v8M15 6l-4 4-4-4"/><path d="M4 14v3a2 2 0 002 2h10a2 2 0 002-2v-3"/></svg>
+            </div>
+            <h2 class="aff-card-title">Extension</h2>
+            <p class="aff-card-desc">Apply for extension of affiliation to add new courses or programmes to an already affiliated institution.</p>
+            <a href="contact.html" class="aff-card-link">Contact Affiliation Cell <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" width="12" height="12"><path d="M1 5h8M5 1l4 4-4 4"/></svg></a>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="aff-filter-row">
+          <span class="aff-filter-label">Filter:</span>
+          <select class="aff-select" id="district-filter" aria-label="Filter by district">
+            <option value="">All Districts</option>
+            <option>Ajmer</option>
+            <option>Nagaur</option>
+            <option>Bhilwara</option>
+            <option>Tonk</option>
+          </select>
+          <select class="aff-select" id="type-filter" aria-label="Filter by type">
+            <option value="">All Types</option>
+            <option>Government</option>
+            <option>Private</option>
+          </select>
+          <div class="aff-search">
+            <input type="search" id="college-search" placeholder="Search colleges…" aria-label="Search colleges" />
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+          </div>
+        </div>
+
+        <p id="aff-count" style="font-size:13px;color:var(--ink-lt);margin-bottom:var(--space-4);">Loading…</p>
+
+        <div class="aff-table-wrap">
+          <table class="aff-table" aria-label="Affiliated colleges">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>College Name</th>
+                <th>District</th>
+                <th>Type</th>
+                <th>Programmes</th>
+              </tr>
+            </thead>
+            <tbody id="college-tbody"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-emblem" style="width:40px;height:40px;font-size:13px;" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--white);line-height:1.2;">MDS University</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Ajmer, Rajasthan</div>
+            </div>
+          </div>
+          <p class="footer-tagline">Shaping Minds, Building Futures since 1987.</p>
+          <address class="footer-address">
+            Pushkar Road, Ajmer<br/>
+            Rajasthan – 305009<br/>
+            <a href="tel:+911452787056">+91-145-278-7056</a>
+          </address>
+        </div>
+        <div>
+          <h3 class="footer-heading">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About MDSU</a></li>
+            <li><a href="admissions.html">Admissions</a></li>
+            <li><a href="exams.html">Exams &amp; Results</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Students</h3>
+          <ul class="footer-links">
+            <li><a href="admissions.html">Apply Now</a></li>
+            <li><a href="exams.html">Check Results</a></li>
+            <li><a href="#">Scholarships</a></li>
+            <li><a href="#">Academic Calendar</a></li>
+            <li><a href="#">Fee Structure</a></li>
+            <li><a href="#">Hostel</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">University</h3>
+          <ul class="footer-links">
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+            <li><a href="#">IQAC</a></li>
+            <li><a href="#">RTI</a></li>
+            <li><a href="#">Tenders</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Maharshi Dayanand Saraswati University, Ajmer. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    (async function initAffiliation() {
+      const tbody = document.getElementById('college-tbody');
+      const countEl = document.getElementById('aff-count');
+      const districtFilter = document.getElementById('district-filter');
+      const typeFilter = document.getElementById('type-filter');
+      const searchInput = document.getElementById('college-search');
+
+      let allColleges = [];
+
+      try {
+        const res = await fetch('data/colleges.json');
+        allColleges = await res.json();
+      } catch (e) {
+        const row = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 5;
+        td.className = 'aff-empty';
+        td.textContent = 'Unable to load college data. Please try again.';
+        row.appendChild(td);
+        tbody.appendChild(row);
+        return;
+      }
+
+      function render() {
+        const district = districtFilter.value;
+        const type = typeFilter.value;
+        const q = searchInput.value.toLowerCase();
+
+        const filtered = allColleges.filter(c => {
+          const dMatch = !district || c.district === district;
+          const tMatch = !type || c.type === type;
+          const sMatch = !q || c.name.toLowerCase().includes(q) || c.district.toLowerCase().includes(q);
+          return dMatch && tMatch && sMatch;
+        });
+
+        countEl.textContent = filtered.length + ' college' + (filtered.length !== 1 ? 's' : '') + ' found';
+        tbody.replaceChildren();
+
+        if (filtered.length === 0) {
+          const row = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 5;
+          td.className = 'aff-empty';
+          td.textContent = 'No colleges found matching your filters.';
+          row.appendChild(td);
+          tbody.appendChild(row);
+          return;
+        }
+
+        filtered.forEach((college, i) => {
+          const row = document.createElement('tr');
+
+          const numTd = document.createElement('td');
+          numTd.style.cssText = 'color:var(--ink-lt);font-size:12px;';
+          numTd.textContent = i + 1;
+
+          const nameTd = document.createElement('td');
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'aff-college-name';
+          nameSpan.textContent = college.name;
+          nameTd.appendChild(nameSpan);
+
+          const distTd = document.createElement('td');
+          distTd.textContent = college.district;
+
+          const typeTd = document.createElement('td');
+          const badge = document.createElement('span');
+          badge.className = 'aff-type-badge aff-type-badge--' + (college.type === 'Government' ? 'govt' : 'pvt');
+          badge.textContent = college.type;
+          typeTd.appendChild(badge);
+
+          const progTd = document.createElement('td');
+          const progSpan = document.createElement('span');
+          progSpan.className = 'aff-programmes';
+          progSpan.textContent = college.programmes.join(', ');
+          progTd.appendChild(progSpan);
+
+          row.append(numTd, nameTd, distTd, typeTd, progTd);
+          tbody.appendChild(row);
+        });
+      }
+
+      districtFilter.addEventListener('change', render);
+      typeFilter.addEventListener('change', render);
+      searchInput.addEventListener('input', render);
+
+      render();
+    })();
+  </script>
+</body>
+</html>

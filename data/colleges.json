@@ -1,0 +1,22 @@
+[
+  { "id": 1, "name": "Government College, Ajmer", "district": "Ajmer", "type": "Government", "programmes": ["BA", "BSc", "BCom"] },
+  { "id": 2, "name": "Sophia Girls College, Ajmer", "district": "Ajmer", "type": "Private", "programmes": ["BA", "BCom", "BEd"] },
+  { "id": 3, "name": "MDS College of Engineering", "district": "Ajmer", "type": "Private", "programmes": ["BTech", "MTech"] },
+  { "id": 4, "name": "Government College, Beawar", "district": "Ajmer", "type": "Government", "programmes": ["BA", "BCom"] },
+  { "id": 5, "name": "Government PG College", "district": "Nagaur", "type": "Government", "programmes": ["BA", "BSc", "BCom"] },
+  { "id": 6, "name": "Shaheed Bhagat Singh College", "district": "Bhilwara", "type": "Private", "programmes": ["BA", "BCom", "BCA"] },
+  { "id": 7, "name": "Government PG College, Tonk", "district": "Tonk", "type": "Government", "programmes": ["MA", "MSc", "MCom"] },
+  { "id": 8, "name": "Rajputana Law College", "district": "Ajmer", "type": "Private", "programmes": ["LLB"] },
+  { "id": 9, "name": "Subodh College of Commerce", "district": "Nagaur", "type": "Private", "programmes": ["BCom", "MCom", "MBA"] },
+  { "id": 10, "name": "Modern College of Education", "district": "Bhilwara", "type": "Private", "programmes": ["BEd", "MEd"] },
+  { "id": 11, "name": "Aravali College of Law", "district": "Bhilwara", "type": "Private", "programmes": ["LLB", "LLM"] },
+  { "id": 12, "name": "Sai College of Commerce", "district": "Tonk", "type": "Private", "programmes": ["BCom", "MBA"] },
+  { "id": 13, "name": "Rajasthan College of Pharmacy", "district": "Ajmer", "type": "Private", "programmes": ["DPharm", "BPharm"] },
+  { "id": 14, "name": "Government Girls College, Ajmer", "district": "Ajmer", "type": "Government", "programmes": ["BA", "BSc", "BCom"] },
+  { "id": 15, "name": "Vivekananda College", "district": "Nagaur", "type": "Private", "programmes": ["BA", "BCom", "BCA"] },
+  { "id": 16, "name": "Green Valley College of Education", "district": "Tonk", "type": "Private", "programmes": ["BEd"] },
+  { "id": 17, "name": "Rajputana Institute of Technology", "district": "Ajmer", "type": "Private", "programmes": ["BTech", "MCA"] },
+  { "id": 18, "name": "Maharana Pratap College", "district": "Bhilwara", "type": "Government", "programmes": ["BA", "BCom", "BSc"] },
+  { "id": 19, "name": "Sunrise College of Science", "district": "Ajmer", "type": "Private", "programmes": ["BSc", "MSc"] },
+  { "id": 20, "name": "Sunrise Law College", "district": "Nagaur", "type": "Private", "programmes": ["LLB"] }
+]

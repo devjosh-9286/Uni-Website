@@ -1,0 +1,20 @@
+[
+  { "title": "Admissions 2026-27", "desc": "Apply for UG and PG programmes at MDSU", "url": "admissions.html", "category": "Admissions", "keywords": "admission apply form 2026 pg ug" },
+  { "title": "MBA Business Economics", "desc": "Postgraduate programme, Dept of Economics", "url": "admissions.html", "category": "Admissions", "keywords": "mba economics pg postgraduate management" },
+  { "title": "Exams and Results", "desc": "Exam schedules, admit cards, result notifications", "url": "exams.html", "category": "Exams", "keywords": "result exam schedule admit card marksheet" },
+  { "title": "Re-evaluation Form", "desc": "Apply for re-evaluation of answer sheets", "url": "downloads.html", "category": "Downloads", "keywords": "re-evaluation recheck answer sheet form download" },
+  { "title": "About MDSU", "desc": "History, vision, mission, and administration", "url": "about.html", "category": "About", "keywords": "about history established 1987 naac accreditation" },
+  { "title": "Faculty Directory", "desc": "Search academic staff by department", "url": "faculty.html", "category": "Faculty", "keywords": "faculty professor staff department teacher" },
+  { "title": "Affiliation", "desc": "College affiliation process and list of colleges", "url": "affiliation.html", "category": "Affiliation", "keywords": "affiliation college new renewal extension" },
+  { "title": "Downloads", "desc": "Forms, reports, syllabi and official documents", "url": "downloads.html", "category": "Downloads", "keywords": "download form pdf syllabus report document" },
+  { "title": "Contact Us", "desc": "Department contacts, address and grievance form", "url": "contact.html", "category": "Contact", "keywords": "contact phone address grievance helpdesk" },
+  { "title": "Scholarship and Fellowship", "desc": "Available scholarships for eligible students", "url": "admissions.html", "category": "Students", "keywords": "scholarship fellowship financial aid merit" },
+  { "title": "NIRF Ranking", "desc": "MDSU ranked 51-100 in State Public Universities", "url": "about.html", "category": "About", "keywords": "nirf ranking national institutional framework" },
+  { "title": "NAAC Accreditation", "desc": "MDSU is NAAC accredited university", "url": "about.html", "category": "About", "keywords": "naac accreditation quality assessment" },
+  { "title": "Fee Structure", "desc": "Programme-wise fee structure for all courses", "url": "#", "category": "Academics", "keywords": "fee structure tuition charges programme" },
+  { "title": "Academic Calendar", "desc": "Academic schedule, holidays and important dates", "url": "#", "category": "Academics", "keywords": "academic calendar schedule semester holiday" },
+  { "title": "Hostel", "desc": "Hostel allotment and accommodation for students", "url": "#", "category": "Students", "keywords": "hostel accommodation residence allotment" },
+  { "title": "Anti-Ragging Cell", "desc": "Report ragging incidents and university policy", "url": "#", "category": "Student Welfare", "keywords": "anti ragging complaint report cell" },
+  { "title": "Grievance Portal", "desc": "Submit academic and administrative grievances", "url": "contact.html", "category": "Student Welfare", "keywords": "grievance complaint portal submit" },
+  { "title": "RTI", "desc": "Right to Information requests and forms", "url": "downloads.html", "category": "Administration", "keywords": "rti right information transparency" }
+]

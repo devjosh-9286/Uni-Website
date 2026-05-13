@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admissions 2026–27 — MDSU Ajmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* ── Page-specific ── */
+    .adm-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: var(--space-7);
+      padding-block: var(--space-8);
+      align-items: start;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--rule);
+    }
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-lt);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .filter-chips {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+    .chip {
+      padding: 6px 14px;
+      border: 1.5px solid var(--rule);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-mid);
+      background: var(--white);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+    }
+    .chip:hover, .chip.active {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: var(--white);
+    }
+    .filter-search {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--rule);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .filter-search:focus-within { border-color: var(--navy); }
+    .filter-search input {
+      border: none; outline: none; padding: 6px 14px;
+      font-family: var(--font-body); font-size: 13px;
+      width: 200px; background: transparent; color: var(--ink);
+    }
+
+    /* Programme table */
+    .programme-list { display: flex; flex-direction: column; gap: var(--space-3); }
+    .programme-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: var(--space-5);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--space-4);
+      align-items: center;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .programme-card:hover {
+      border-color: var(--navy);
+      box-shadow: 0 4px 16px rgba(7,48,106,0.08);
+    }
+    .prog-dept {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--saffron);
+      margin-bottom: 4px;
+    }
+    h3.prog-name {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: var(--space-3);
+      line-height: 1.3;
+    }
+    .prog-meta {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .prog-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      color: var(--ink-lt);
+    }
+    .prog-meta-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .prog-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .prog-status--open { background: #E8F5E9; color: #2E7D32; }
+    .prog-status--open::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #2E7D32; }
+    .prog-status--closed { background: #FDECEA; color: #C62828; }
+    .prog-actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      align-items: flex-end;
+    }
+    .prog-actions .btn-primary { padding: 10px 20px; font-size: 13px; min-height: 40px; }
+    .prog-actions .btn-outline { padding: 9px 20px; font-size: 13px; min-height: 40px; }
+
+    /* Sidebar widgets */
+    .sidebar-widget {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: var(--space-5);
+    }
+    .widget-head {
+      padding: var(--space-4) var(--space-5);
+      background: var(--navy);
+      color: var(--white);
+    }
+    h3.widget-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .widget-body { padding: var(--space-4) var(--space-5); }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: var(--space-3);
+      padding-block: var(--space-3);
+      border-bottom: 1px solid var(--rule);
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--rule);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .timeline-dot.done { background: var(--saffron); }
+    .timeline-dot.current { background: var(--navy); box-shadow: 0 0 0 3px rgba(7,48,106,0.15); }
+    .timeline-event {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .timeline-date { font-size: 11px; color: var(--ink-lt); margin-top: 2px; }
+
+    .how-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: var(--space-3);
+      padding-block: var(--space-3);
+      border-bottom: 1px solid var(--rule);
+    }
+    .how-item:last-child { border-bottom: none; }
+    .how-num {
+      width: 24px;
+      height: 24px;
+      background: var(--saffron-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--saffron);
+      flex-shrink: 0;
+    }
+    .how-text {
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.4;
+    }
+    .how-text strong { color: var(--ink); font-weight: 500; }
+
+    /* Important notice */
+    .adm-notice {
+      background: var(--saffron-bg);
+      border: 1px solid #F0C078;
+      border-radius: var(--radius);
+      padding: var(--space-5);
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .adm-notice-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      line-height: 1.4;
+    }
+    .adm-notice-text { font-size: 14px; color: #7A4E00; line-height: 1.6; }
+    .adm-notice-text strong { font-weight: 600; }
+
+    @media (max-width: 900px) {
+      .adm-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .programme-card { grid-template-columns: 1fr; }
+      .prog-actions { flex-direction: row; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Util bar -->
+  <div class="util-bar">
+    <div class="container">
+      <div class="util-bar__left">
+        <span class="util-date">Wednesday, 13 May 2026</span>
+        <a href="index.html">Home</a>
+        <a href="#">Library</a>
+        <a href="#">Contacts</a>
+      </div>
+      <div class="util-bar__right">
+        <div class="util-a11y" aria-label="Text size">
+          <a href="#" aria-label="Decrease text size">A-</a>
+          <a href="#" aria-label="Default text size">A</a>
+          <a href="#" aria-label="Increase text size">A+</a>
+        </div>
+        <div class="lang-toggle">
+          <a href="#" class="active">EN</a>
+          <a href="#">हि</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="site-logo" aria-label="MDSU — Home">
+          <div class="logo-emblem" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+          <div class="logo-text-group">
+            <span class="logo-name">Maharshi Dayanand Saraswati</span>
+            <span class="logo-name-hindi">महर्षि दयानंद सरस्वती विश्वविद्यालय</span>
+            <span class="logo-sub">University, Ajmer · Est. 1987</span>
+          </div>
+        </a>
+        <nav aria-label="Primary">
+          <ul class="primary-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">About <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="#">Vision &amp; Mission</a></li><li><a href="#">Faculty</a></li><li><a href="#">Administration</a></li></ul>
+            </li>
+            <li><a href="#">Academics <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="#">Academic Programs</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Academic Calendar</a></li></ul>
+            </li>
+            <li><a href="admissions.html" class="active">Students <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li><li><a href="#">Downloads</a></li></ul>
+            </li>
+            <li><a href="#">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <form class="search-form" role="search" action="search.html">
+            <input class="search-input" type="search" name="q" placeholder="Search…" aria-label="Search" />
+            <button class="search-btn" type="submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+            </button>
+          </form>
+          <button id="dark-mode-toggle" aria-label="Toggle dark mode" aria-pressed="false" style="background:none;border:1.5px solid var(--rule);border-radius:20px;padding:8px 12px;cursor:pointer;font-size:16px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;color:var(--ink-mid);transition:border-color 0.2s;">
+            <span class="dm-icon">&#9790;</span>
+          </button>
+          <a href="#" class="btn-login">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="4" r="2.5"/><path d="M1 12c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            Login
+          </a>
+          <button class="nav-toggle" aria-label="Open menu">
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <a href="#">Students</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span aria-current="page">Admissions</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Page hero -->
+  <section class="page-hero" aria-labelledby="page-heading">
+    <div class="container page-hero-content">
+      <p class="page-hero-eyebrow">Session 2026–27</p>
+      <h1 class="page-title" id="page-heading">Admissions Open</h1>
+      <p class="page-hero-desc">Postgraduate and doctoral programmes across science, arts, commerce, management, and professional disciplines. Apply before the deadlines.</p>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main style="background: var(--cream);">
+    <div class="container">
+      <div class="adm-layout">
+
+        <!-- Programme list -->
+        <section aria-labelledby="prog-heading">
+
+          <!-- Important notice -->
+          <div class="adm-notice" role="alert">
+            <span class="adm-notice-icon" aria-hidden="true">📋</span>
+            <div class="adm-notice-text">
+              <strong>Session 2026–27 admissions are rolling.</strong> Individual department notifications are listed below. General admission schedule will be announced shortly. Check this page regularly or subscribe to notifications.
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="filter-bar">
+            <span class="filter-label">Filter:</span>
+            <div class="filter-chips" role="group" aria-label="Filter by category">
+              <button class="chip active">All</button>
+              <button class="chip">Science</button>
+              <button class="chip">Arts &amp; Humanities</button>
+              <button class="chip">Commerce</button>
+              <button class="chip">Management</button>
+              <button class="chip">Professional</button>
+            </div>
+            <div class="filter-search">
+              <input type="search" placeholder="Search programmes…" aria-label="Search programmes" />
+            </div>
+          </div>
+
+          <h2 class="sr-only" id="prog-heading">Available Programmes</h2>
+          <div class="programme-list">
+
+            <article class="programme-card">
+              <div>
+                <div class="prog-dept">Dept. of Economics</div>
+                <h3 class="prog-name">MBA Business Economics</h3>
+                <div class="prog-meta">
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="10" rx="1"/><path d="M4 1v4M10 1v4M1 7h12"/></svg>
+                    Notification: 12 May 2026
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2"/></svg>
+                    2 Years
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.8 3.6L13 5.4l-3 2.9.7 4.1L7 10.3l-3.7 2.1.7-4.1-3-2.9 4.2-.8z"/></svg>
+                    PG · Full-time
+                  </span>
+                </div>
+              </div>
+              <div class="prog-actions">
+                <span class="prog-status prog-status--open">Open</span>
+                <a href="#" class="btn-primary">Apply Now</a>
+                <a href="#" class="btn-outline">Notification PDF</a>
+              </div>
+            </article>
+
+            <article class="programme-card">
+              <div>
+                <div class="prog-dept">Dept. of Economics</div>
+                <h3 class="prog-name">MA Economics</h3>
+                <div class="prog-meta">
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="10" rx="1"/><path d="M4 1v4M10 1v4M1 7h12"/></svg>
+                    Notification: 12 May 2026
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2"/></svg>
+                    2 Years
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.8 3.6L13 5.4l-3 2.9.7 4.1L7 10.3l-3.7 2.1.7-4.1-3-2.9 4.2-.8z"/></svg>
+                    PG · Full-time
+                  </span>
+                </div>
+              </div>
+              <div class="prog-actions">
+                <span class="prog-status prog-status--open">Open</span>
+                <a href="#" class="btn-primary">Apply Now</a>
+                <a href="#" class="btn-outline">Notification PDF</a>
+              </div>
+            </article>
+
+            <article class="programme-card">
+              <div>
+                <div class="prog-dept">Dept. of Botany</div>
+                <h3 class="prog-name">M.Sc. Botany</h3>
+                <div class="prog-meta">
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="10" rx="1"/><path d="M4 1v4M10 1v4M1 7h12"/></svg>
+                    Notification: 11 May 2026
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2"/></svg>
+                    2 Years
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.8 3.6L13 5.4l-3 2.9.7 4.1L7 10.3l-3.7 2.1.7-4.1-3-2.9 4.2-.8z"/></svg>
+                    PG · Full-time
+                  </span>
+                </div>
+              </div>
+              <div class="prog-actions">
+                <span class="prog-status prog-status--open">Open</span>
+                <a href="#" class="btn-primary">Apply Now</a>
+                <a href="#" class="btn-outline">Notification PDF</a>
+              </div>
+            </article>
+
+            <article class="programme-card">
+              <div>
+                <div class="prog-dept">Dept. of Pharmacy</div>
+                <h3 class="prog-name">M.Pharm (Pharmacology / Pharmaceutics)</h3>
+                <div class="prog-meta">
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="10" rx="1"/><path d="M4 1v4M10 1v4M1 7h12"/></svg>
+                    Notification: 11 May 2026
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2"/></svg>
+                    2 Years
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.8 3.6L13 5.4l-3 2.9.7 4.1L7 10.3l-3.7 2.1.7-4.1-3-2.9 4.2-.8z"/></svg>
+                    Professional · Full-time
+                  </span>
+                </div>
+              </div>
+              <div class="prog-actions">
+                <span class="prog-status prog-status--open">Open</span>
+                <a href="#" class="btn-primary">Apply Now</a>
+                <a href="#" class="btn-outline">Notification PDF</a>
+              </div>
+            </article>
+
+            <article class="programme-card">
+              <div>
+                <div class="prog-dept">Dept. of Mathematics</div>
+                <h3 class="prog-name">M.Sc. Mathematics</h3>
+                <div class="prog-meta">
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="10" rx="1"/><path d="M4 1v4M10 1v4M1 7h12"/></svg>
+                    Notification: 11 May 2026
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2"/></svg>
+                    2 Years
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.8 3.6L13 5.4l-3 2.9.7 4.1L7 10.3l-3.7 2.1.7-4.1-3-2.9 4.2-.8z"/></svg>
+                    PG · Full-time
+                  </span>
+                </div>
+              </div>
+              <div class="prog-actions">
+                <span class="prog-status prog-status--open">Open</span>
+                <a href="#" class="btn-primary">Apply Now</a>
+                <a href="#" class="btn-outline">Notification PDF</a>
+              </div>
+            </article>
+
+            <article class="programme-card">
+              <div>
+                <div class="prog-dept">Dept. of Remote Sensing</div>
+                <h3 class="prog-name">M.Sc. Remote Sensing &amp; Geo-Informatics</h3>
+                <div class="prog-meta">
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="10" rx="1"/><path d="M4 1v4M10 1v4M1 7h12"/></svg>
+                    Notification: 9 May 2026
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2"/></svg>
+                    2 Years
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.8 3.6L13 5.4l-3 2.9.7 4.1L7 10.3l-3.7 2.1.7-4.1-3-2.9 4.2-.8z"/></svg>
+                    PG · Full-time
+                  </span>
+                </div>
+              </div>
+              <div class="prog-actions">
+                <span class="prog-status prog-status--open">Open</span>
+                <a href="#" class="btn-primary">Apply Now</a>
+                <a href="#" class="btn-outline">Notification PDF</a>
+              </div>
+            </article>
+
+            <article class="programme-card">
+              <div>
+                <div class="prog-dept">Dept. of Environmental Sciences</div>
+                <h3 class="prog-name">M.Sc. Environmental Sciences</h3>
+                <div class="prog-meta">
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="10" rx="1"/><path d="M4 1v4M10 1v4M1 7h12"/></svg>
+                    Notification: 8 May 2026
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3l2 2"/></svg>
+                    2 Years
+                  </span>
+                  <span class="prog-meta-item">
+                    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1l1.8 3.6L13 5.4l-3 2.9.7 4.1L7 10.3l-3.7 2.1.7-4.1-3-2.9 4.2-.8z"/></svg>
+                    PG · Full-time
+                  </span>
+                </div>
+              </div>
+              <div class="prog-actions">
+                <span class="prog-status prog-status--open">Open</span>
+                <a href="#" class="btn-primary">Apply Now</a>
+                <a href="#" class="btn-outline">Notification PDF</a>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside aria-label="Admission information">
+
+          <div class="sidebar-widget">
+            <div class="widget-head"><h3 class="widget-title">How to Apply</h3></div>
+            <div class="widget-body">
+              <div class="how-item">
+                <span class="how-num">1</span>
+                <div class="how-text"><strong>Check eligibility</strong> — read the notification PDF for your programme.</div>
+              </div>
+              <div class="how-item">
+                <span class="how-num">2</span>
+                <div class="how-text"><strong>Register online</strong> — create an account on the student portal.</div>
+              </div>
+              <div class="how-item">
+                <span class="how-num">3</span>
+                <div class="how-text"><strong>Fill the form</strong> — complete the application and upload documents.</div>
+              </div>
+              <div class="how-item">
+                <span class="how-num">4</span>
+                <div class="how-text"><strong>Pay the fee</strong> — pay the application fee online via portal.</div>
+              </div>
+              <div class="how-item">
+                <span class="how-num">5</span>
+                <div class="how-text"><strong>Submit &amp; track</strong> — submit and monitor your application status.</div>
+              </div>
+              <div style="padding-top: var(--space-4);">
+                <a href="#" class="btn-primary" style="width: 100%; justify-content: center;">Go to Student Portal</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-widget">
+            <div class="widget-head"><h3 class="widget-title">Important Dates</h3></div>
+            <div class="widget-body">
+              <div class="timeline-item">
+                <div class="timeline-dot done"></div>
+                <div>
+                  <div class="timeline-event">Admission schedule announced</div>
+                  <div class="timeline-date">22 Apr 2026</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot current"></div>
+                <div>
+                  <div class="timeline-event">Department notifications (rolling)</div>
+                  <div class="timeline-date">May 2026 — ongoing</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div>
+                  <div class="timeline-event">Online applications open</div>
+                  <div class="timeline-date">To be announced</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div>
+                  <div class="timeline-event">Merit list published</div>
+                  <div class="timeline-date">To be announced</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div>
+                  <div class="timeline-event">Classes begin</div>
+                  <div class="timeline-date">To be announced</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-widget">
+            <div class="widget-head"><h3 class="widget-title">Useful Links</h3></div>
+            <div class="widget-body">
+              <ul class="footer-links" style="--rule: #E8E2DA;">
+                <li><a href="#" style="color: var(--navy); padding-block: 8px;">Online Fee Payment →</a></li>
+                <li><a href="#" style="color: var(--navy); padding-block: 8px;">Scholarship / Fellowship →</a></li>
+                <li><a href="#" style="color: var(--navy); padding-block: 8px;">Fee Structure 2026–27 →</a></li>
+                <li><a href="#" style="color: var(--navy); padding-block: 8px;">Hostel Information →</a></li>
+                <li><a href="#" style="color: var(--navy); padding-block: 8px;">Grievance Portal →</a></li>
+              </ul>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="footer-logo-name">MDS University, Ajmer</div>
+          <p>Maharshi Dayanand Saraswati University is a public university in Ajmer, Rajasthan. Established in 1987.</p>
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Facebook">f</a>
+            <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+            <a href="#" class="social-link" aria-label="Instagram">in</a>
+            <a href="#" class="social-link" aria-label="YouTube">▶</a>
+          </div>
+        </div>
+        <div><h3 class="footer-col-title">Academics</h3><ul class="footer-links"><li><a href="#">Academic Programs</a></li><li><a href="#">Academic Calendar</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Central Library</a></li></ul></div>
+        <div><h3 class="footer-col-title">Students</h3><ul class="footer-links"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li><li><a href="#">Downloads</a></li></ul></div>
+        <div><h3 class="footer-col-title">University</h3><ul class="footer-links"><li><a href="#">Anti-Ragging</a></li><li><a href="#">Grievance</a></li><li><a href="#">RTI</a></li><li><a href="#">NIRF</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Maharshi Dayanand Saraswati University, Ajmer.</span>
+        <nav class="footer-bottom-links"><a href="#">Privacy</a><a href="#">Accessibility</a><a href="#">Sitemap</a></nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

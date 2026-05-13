@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Directory — MDSU Ajmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .faculty-layout { padding-block: var(--space-8); }
+
+    .filter-bar { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-6); padding-bottom: var(--space-5); border-bottom: 1px solid var(--rule); }
+    .filter-label { font-size: 12px; font-weight: 600; color: var(--ink-lt); letter-spacing: 0.05em; text-transform: uppercase; flex-shrink: 0; }
+    .filter-chips { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .chip { padding: 6px 14px; border: 1.5px solid var(--rule); border-radius: 20px; font-size: 13px; font-weight: 500; color: var(--ink-mid); background: var(--white); cursor: pointer; transition: border-color 0.15s, background 0.15s, color 0.15s; min-height: 36px; display: flex; align-items: center; }
+    .chip:hover, .chip.active { border-color: var(--navy); background: var(--navy); color: var(--white); }
+    .filter-search { margin-left: auto; display: flex; align-items: center; border: 1.5px solid var(--rule); border-radius: 20px; overflow: hidden; transition: border-color 0.2s; }
+    .filter-search:focus-within { border-color: var(--navy); }
+    .filter-search input { border: none; outline: none; padding: 6px 14px; font-family: var(--font-body); font-size: 13px; width: 200px; background: transparent; color: var(--ink); }
+
+    .faculty-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+
+    .faculty-card { background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); padding: var(--space-5); transition: border-color 0.2s, box-shadow 0.2s; }
+    .faculty-card:hover { border-color: var(--navy); box-shadow: 0 4px 16px rgba(7,48,106,0.08); }
+
+    .faculty-card-top { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4); }
+    .faculty-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--white); flex-shrink: 0; }
+    .faculty-name { font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1.3; margin-bottom: 3px; }
+    .faculty-role { font-size: 12px; color: var(--ink-lt); }
+    .faculty-dept-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--saffron); background: var(--saffron-bg); padding: 3px 9px; border-radius: 20px; margin-bottom: var(--space-3); }
+    .faculty-spec { font-size: 13px; color: var(--ink-mid); line-height: 1.5; margin-bottom: var(--space-3); }
+    .faculty-email { font-size: 12px; color: var(--navy); word-break: break-all; text-decoration: none; }
+    .faculty-email:hover { text-decoration: underline; }
+    .faculty-empty { grid-column: 1 / -1; text-align: center; padding: 64px 0; color: var(--ink-lt); font-size: 16px; }
+
+    @media (max-width: 960px) { .faculty-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .faculty-grid { grid-template-columns: 1fr; } .filter-search { margin-left: 0; width: 100%; } .filter-search input { width: 100%; } }
+  </style>
+</head>
+<body>
+
+  <div class="util-bar">
+    <div class="container">
+      <div class="util-bar__left">
+        <span class="util-date">Wednesday, 13 May 2026</span>
+        <a href="index.html">Home</a>
+        <a href="#">Library</a>
+        <a href="contact.html">Contacts</a>
+      </div>
+      <div class="util-bar__right">
+        <div class="util-a11y" aria-label="Text size">
+          <a href="#" aria-label="Decrease text size">A-</a>
+          <a href="#" aria-label="Default text size">A</a>
+          <a href="#" aria-label="Increase text size">A+</a>
+        </div>
+        <div class="lang-toggle">
+          <a href="#" class="active">EN</a>
+          <a href="#">हि</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="site-logo" aria-label="MDSU — Home">
+          <div class="logo-emblem" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+          <div class="logo-text-group">
+            <span class="logo-name">Maharshi Dayanand Saraswati</span>
+            <span class="logo-name-hindi">महर्षि दयानंद सरस्वती विश्वविद्यालय</span>
+            <span class="logo-sub">University, Ajmer · Est. 1987</span>
+          </div>
+        </a>
+        <nav aria-label="Primary">
+          <ul class="primary-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="about.html">Vision &amp; Mission</a></li><li><a href="faculty.html">Faculty</a></li><li><a href="about.html">Administration</a></li></ul>
+            </li>
+            <li><a href="#">Academics <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="#">Academic Programs</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Academic Calendar</a></li></ul>
+            </li>
+            <li><a href="admissions.html">Students <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li><li><a href="downloads.html">Downloads</a></li></ul>
+            </li>
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <form class="search-form" role="search" action="search.html">
+            <input class="search-input" type="search" name="q" placeholder="Search…" aria-label="Search" />
+            <button class="search-btn" type="submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+            </button>
+          </form>
+          <button id="dark-mode-toggle" aria-label="Toggle dark mode" aria-pressed="false" style="background:none;border:1.5px solid var(--rule);border-radius:20px;padding:8px 12px;cursor:pointer;font-size:16px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;color:var(--ink-mid);transition:border-color 0.2s;">
+            <span class="dm-icon">&#9790;</span>
+          </button>
+          <a href="#" class="btn-login">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="4" r="2.5"/><path d="M1 12c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            Login
+          </a>
+          <button class="nav-toggle" aria-label="Open menu">
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <a href="about.html">About</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span aria-current="page">Faculty Directory</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="page-hero" aria-labelledby="page-heading">
+    <div class="container page-hero-content">
+      <p class="page-hero-eyebrow">Academic Staff</p>
+      <h1 class="page-title" id="page-heading">Faculty Directory</h1>
+      <p class="page-hero-desc">Meet the distinguished academic staff across departments. Filter by department or search by name.</p>
+    </div>
+  </section>
+
+  <main style="background: var(--cream);">
+    <div class="container">
+      <div class="faculty-layout">
+
+        <div class="filter-bar">
+          <span class="filter-label">Department:</span>
+          <div class="filter-chips" id="dept-chips" role="group" aria-label="Filter by department">
+            <button class="chip active" data-dept="all">All</button>
+          </div>
+          <div class="filter-search">
+            <input type="search" id="faculty-search" placeholder="Search by name or specialization…" aria-label="Search faculty" />
+          </div>
+        </div>
+
+        <p id="faculty-count" style="font-size:13px;color:var(--ink-lt);margin-bottom:var(--space-5);">Loading…</p>
+
+        <div class="faculty-grid" id="faculty-grid" aria-live="polite" aria-label="Faculty list"></div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-emblem" style="width:40px;height:40px;font-size:13px;" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--white);line-height:1.2;">MDS University</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Ajmer, Rajasthan</div>
+            </div>
+          </div>
+          <p class="footer-tagline">Shaping Minds, Building Futures since 1987.</p>
+          <address class="footer-address">
+            Pushkar Road, Ajmer<br/>
+            Rajasthan – 305009<br/>
+            <a href="tel:+911452787056">+91-145-278-7056</a>
+          </address>
+        </div>
+        <div>
+          <h3 class="footer-heading">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About MDSU</a></li>
+            <li><a href="admissions.html">Admissions</a></li>
+            <li><a href="exams.html">Exams &amp; Results</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Students</h3>
+          <ul class="footer-links">
+            <li><a href="admissions.html">Apply Now</a></li>
+            <li><a href="exams.html">Check Results</a></li>
+            <li><a href="#">Scholarships</a></li>
+            <li><a href="#">Academic Calendar</a></li>
+            <li><a href="#">Fee Structure</a></li>
+            <li><a href="#">Hostel</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">University</h3>
+          <ul class="footer-links">
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+            <li><a href="#">IQAC</a></li>
+            <li><a href="#">RTI</a></li>
+            <li><a href="#">Tenders</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Maharshi Dayanand Saraswati University, Ajmer. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    (async function initFaculty() {
+      const grid = document.getElementById('faculty-grid');
+      const chipsContainer = document.getElementById('dept-chips');
+      const searchInput = document.getElementById('faculty-search');
+      const countEl = document.getElementById('faculty-count');
+
+      let allFaculty = [];
+      let activeDept = 'all';
+      let searchQuery = '';
+
+      try {
+        const res = await fetch('data/faculty.json');
+        allFaculty = await res.json();
+      } catch (e) {
+        const errMsg = document.createElement('p');
+        errMsg.className = 'faculty-empty';
+        errMsg.textContent = 'Unable to load faculty data. Please try again.';
+        grid.appendChild(errMsg);
+        return;
+      }
+
+      const depts = [...new Set(allFaculty.map(f => f.dept))].sort();
+      depts.forEach(dept => {
+        const btn = document.createElement('button');
+        btn.className = 'chip';
+        btn.dataset.dept = dept;
+        btn.textContent = dept;
+        chipsContainer.appendChild(btn);
+      });
+
+      chipsContainer.addEventListener('click', e => {
+        const btn = e.target.closest('.chip');
+        if (!btn) return;
+        chipsContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        activeDept = btn.dataset.dept;
+        render();
+      });
+
+      searchInput.addEventListener('input', e => {
+        searchQuery = e.target.value.toLowerCase();
+        render();
+      });
+
+      function render() {
+        const filtered = allFaculty.filter(f => {
+          const deptMatch = activeDept === 'all' || f.dept === activeDept;
+          const searchMatch = !searchQuery ||
+            f.name.toLowerCase().includes(searchQuery) ||
+            f.specialization.toLowerCase().includes(searchQuery) ||
+            f.dept.toLowerCase().includes(searchQuery);
+          return deptMatch && searchMatch;
+        });
+
+        countEl.textContent = filtered.length + ' faculty member' + (filtered.length !== 1 ? 's' : '') + ' found';
+
+        grid.replaceChildren();
+
+        if (filtered.length === 0) {
+          const empty = document.createElement('p');
+          empty.className = 'faculty-empty';
+          empty.textContent = 'No faculty found matching your criteria.';
+          grid.appendChild(empty);
+          return;
+        }
+
+        filtered.forEach(f => {
+          const card = document.createElement('article');
+          card.className = 'faculty-card';
+
+          const top = document.createElement('div');
+          top.className = 'faculty-card-top';
+
+          const avatar = document.createElement('div');
+          avatar.className = 'faculty-avatar';
+          avatar.textContent = f.initial;
+
+          const nameGroup = document.createElement('div');
+          const nameEl = document.createElement('div');
+          nameEl.className = 'faculty-name';
+          nameEl.textContent = f.name;
+          const roleEl = document.createElement('div');
+          roleEl.className = 'faculty-role';
+          roleEl.textContent = f.role;
+          nameGroup.append(nameEl, roleEl);
+          top.append(avatar, nameGroup);
+
+          const deptTag = document.createElement('div');
+          deptTag.className = 'faculty-dept-tag';
+          deptTag.textContent = f.dept;
+
+          const spec = document.createElement('p');
+          spec.className = 'faculty-spec';
+          spec.textContent = f.specialization;
+
+          const email = document.createElement('a');
+          email.className = 'faculty-email';
+          email.href = 'mailto:' + f.email;
+          email.textContent = f.email;
+
+          card.append(top, deptTag, spec, email);
+          grid.appendChild(card);
+        });
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>

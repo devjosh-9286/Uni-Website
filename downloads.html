@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Downloads — MDSU Ajmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .dl-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: var(--space-8);
+      padding-block: var(--space-8);
+      align-items: start;
+    }
+
+    /* Sticky sidebar */
+    .dl-sidebar {
+      position: sticky;
+      top: 80px;
+    }
+    .dl-sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-lt);
+      margin-bottom: var(--space-3);
+    }
+    .dl-sidebar-nav { list-style: none; }
+    .dl-sidebar-nav li { margin-bottom: 2px; }
+    .dl-sidebar-nav a {
+      display: block;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-mid);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      border-left: 3px solid transparent;
+    }
+    .dl-sidebar-nav a:hover { background: var(--cream); color: var(--ink); }
+    .dl-sidebar-nav a.active { background: var(--cream); color: var(--navy); border-left-color: var(--navy); font-weight: 600; }
+
+    /* Search */
+    .dl-search-bar {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: var(--space-7);
+      transition: border-color 0.2s;
+      background: var(--white);
+    }
+    .dl-search-bar:focus-within { border-color: var(--navy); }
+    .dl-search-bar input {
+      flex: 1; border: none; outline: none; padding: 11px 16px;
+      font-family: var(--font-body); font-size: 14px;
+      background: transparent; color: var(--ink);
+    }
+    .dl-search-bar svg { margin-right: 12px; color: var(--ink-lt); flex-shrink: 0; }
+
+    /* Category sections */
+    .dl-section { margin-bottom: var(--space-8); scroll-margin-top: 100px; }
+    .dl-section-title {
+      font-family: var(--font-display);
+      font-size: 21px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 2px solid var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .dl-section-count {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink-lt);
+      background: var(--cream);
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    /* Downloads table */
+    .dl-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--rule);
+    }
+    .dl-table thead { background: var(--cream); }
+    .dl-table th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-lt);
+      border-bottom: 1px solid var(--rule);
+    }
+    .dl-table td {
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--ink);
+      border-bottom: 1px solid var(--rule);
+      vertical-align: middle;
+    }
+    .dl-table tr:last-child td { border-bottom: none; }
+    .dl-table tr:hover td { background: var(--cream); }
+    .dl-table tr[hidden] { display: none; }
+
+    .dl-doc-title { font-weight: 500; }
+    .dl-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: #FDECEA;
+      color: #C62828;
+    }
+    .dl-date { color: var(--ink-lt); }
+    .dl-size { color: var(--ink-lt); }
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 14px;
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .dl-btn:hover { background: var(--navy-dark); }
+    .dl-btn svg { width: 13px; height: 13px; }
+
+    .dl-empty-row td { text-align: center; color: var(--ink-lt); padding: 24px; font-style: italic; }
+
+    @media (max-width: 860px) {
+      .dl-layout { grid-template-columns: 1fr; }
+      .dl-sidebar { position: static; display: flex; gap: var(--space-2); flex-wrap: wrap; }
+      .dl-sidebar-title { display: none; }
+      .dl-sidebar-nav { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+      .dl-sidebar-nav li { margin: 0; }
+      .dl-sidebar-nav a { border-left: none; padding: 6px 12px; border-radius: 20px; border: 1.5px solid var(--rule); }
+      .dl-sidebar-nav a.active { border-color: var(--navy); }
+    }
+    @media (max-width: 600px) {
+      .dl-table th:nth-child(3), .dl-table td:nth-child(3),
+      .dl-table th:nth-child(4), .dl-table td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="util-bar">
+    <div class="container">
+      <div class="util-bar__left">
+        <span class="util-date">Wednesday, 13 May 2026</span>
+        <a href="index.html">Home</a>
+        <a href="#">Library</a>
+        <a href="contact.html">Contacts</a>
+      </div>
+      <div class="util-bar__right">
+        <div class="util-a11y" aria-label="Text size">
+          <a href="#" aria-label="Decrease text size">A-</a>
+          <a href="#" aria-label="Default text size">A</a>
+          <a href="#" aria-label="Increase text size">A+</a>
+        </div>
+        <div class="lang-toggle">
+          <a href="#" class="active">EN</a>
+          <a href="#">हि</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="site-logo" aria-label="MDSU — Home">
+          <div class="logo-emblem" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+          <div class="logo-text-group">
+            <span class="logo-name">Maharshi Dayanand Saraswati</span>
+            <span class="logo-name-hindi">महर्षि दयानंद सरस्वती विश्वविद्यालय</span>
+            <span class="logo-sub">University, Ajmer · Est. 1987</span>
+          </div>
+        </a>
+        <nav aria-label="Primary">
+          <ul class="primary-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="about.html">Vision &amp; Mission</a></li><li><a href="faculty.html">Faculty</a></li><li><a href="about.html">Administration</a></li></ul>
+            </li>
+            <li><a href="#">Academics <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="#">Academic Programs</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Academic Calendar</a></li></ul>
+            </li>
+            <li><a href="admissions.html" class="active">Students <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li><li><a href="downloads.html">Downloads</a></li></ul>
+            </li>
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <form class="search-form" role="search" action="search.html">
+            <input class="search-input" type="search" name="q" placeholder="Search…" aria-label="Search" />
+            <button class="search-btn" type="submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+            </button>
+          </form>
+          <button id="dark-mode-toggle" aria-label="Toggle dark mode" aria-pressed="false" style="background:none;border:1.5px solid var(--rule);border-radius:20px;padding:8px 12px;cursor:pointer;font-size:16px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;color:var(--ink-mid);transition:border-color 0.2s;">
+            <span class="dm-icon">&#9790;</span>
+          </button>
+          <a href="#" class="btn-login">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="4" r="2.5"/><path d="M1 12c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            Login
+          </a>
+          <button class="nav-toggle" aria-label="Open menu">
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <a href="admissions.html">Students</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span aria-current="page">Downloads</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="page-hero" aria-labelledby="page-heading">
+    <div class="container page-hero-content">
+      <p class="page-hero-eyebrow">Official Documents</p>
+      <h1 class="page-title" id="page-heading">Downloads</h1>
+      <p class="page-hero-desc">Forms, syllabi, reports, and official documents. Search or browse by category.</p>
+    </div>
+  </section>
+
+  <main style="background: var(--cream);">
+    <div class="container">
+      <div class="dl-layout">
+
+        <!-- Sidebar -->
+        <aside class="dl-sidebar" aria-label="Document categories">
+          <p class="dl-sidebar-title">Categories</p>
+          <ul class="dl-sidebar-nav" id="dl-nav"></ul>
+        </aside>
+
+        <!-- Content -->
+        <div>
+          <div class="dl-search-bar">
+            <input type="search" id="dl-search" placeholder="Search documents…" aria-label="Search documents" />
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+          </div>
+
+          <div id="dl-sections" aria-live="polite"></div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-emblem" style="width:40px;height:40px;font-size:13px;" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--white);line-height:1.2;">MDS University</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Ajmer, Rajasthan</div>
+            </div>
+          </div>
+          <p class="footer-tagline">Shaping Minds, Building Futures since 1987.</p>
+          <address class="footer-address">
+            Pushkar Road, Ajmer<br/>
+            Rajasthan – 305009<br/>
+            <a href="tel:+911452787056">+91-145-278-7056</a>
+          </address>
+        </div>
+        <div>
+          <h3 class="footer-heading">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About MDSU</a></li>
+            <li><a href="admissions.html">Admissions</a></li>
+            <li><a href="exams.html">Exams &amp; Results</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Students</h3>
+          <ul class="footer-links">
+            <li><a href="admissions.html">Apply Now</a></li>
+            <li><a href="exams.html">Check Results</a></li>
+            <li><a href="#">Scholarships</a></li>
+            <li><a href="#">Academic Calendar</a></li>
+            <li><a href="#">Fee Structure</a></li>
+            <li><a href="#">Hostel</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">University</h3>
+          <ul class="footer-links">
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+            <li><a href="#">IQAC</a></li>
+            <li><a href="#">RTI</a></li>
+            <li><a href="#">Tenders</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Maharshi Dayanand Saraswati University, Ajmer. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    (async function initDownloads() {
+      const nav = document.getElementById('dl-nav');
+      const sectionsEl = document.getElementById('dl-sections');
+      const searchInput = document.getElementById('dl-search');
+
+      let allDocs = [];
+
+      try {
+        const res = await fetch('data/downloads.json');
+        allDocs = await res.json();
+      } catch (e) {
+        const err = document.createElement('p');
+        err.style.cssText = 'color:var(--ink-lt);padding:48px 0;text-align:center;';
+        err.textContent = 'Unable to load documents. Please try again.';
+        sectionsEl.appendChild(err);
+        return;
+      }
+
+      // Group by category
+      const categories = [...new Set(allDocs.map(d => d.category))];
+
+      // Build sidebar nav
+      categories.forEach(cat => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#cat-' + cat.toLowerCase().replace(/\s+/g, '-');
+        a.textContent = cat;
+        li.appendChild(a);
+        nav.appendChild(li);
+      });
+
+      // Build sections + tables
+      function buildSections(query) {
+        sectionsEl.replaceChildren();
+        const q = query.toLowerCase();
+
+        categories.forEach(cat => {
+          const docs = allDocs.filter(d => {
+            const catMatch = d.category === cat;
+            const searchMatch = !q || d.title.toLowerCase().includes(q) || d.category.toLowerCase().includes(q);
+            return catMatch && searchMatch;
+          });
+
+          const section = document.createElement('section');
+          section.className = 'dl-section';
+          section.id = 'cat-' + cat.toLowerCase().replace(/\s+/g, '-');
+
+          const heading = document.createElement('h2');
+          heading.className = 'dl-section-title';
+          const headingText = document.createElement('span');
+          headingText.textContent = cat;
+          const countBadge = document.createElement('span');
+          countBadge.className = 'dl-section-count';
+          countBadge.textContent = docs.length + ' document' + (docs.length !== 1 ? 's' : '');
+          heading.append(headingText, countBadge);
+
+          const table = document.createElement('table');
+          table.className = 'dl-table';
+
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+          ['Document', 'Format', 'Size', 'Date', ''].forEach(label => {
+            const th = document.createElement('th');
+            th.textContent = label;
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+
+          const tbody = document.createElement('tbody');
+
+          if (docs.length === 0) {
+            const emptyRow = document.createElement('tr');
+            emptyRow.className = 'dl-empty-row';
+            const td = document.createElement('td');
+            td.colSpan = 5;
+            td.textContent = 'No documents found matching your search.';
+            emptyRow.appendChild(td);
+            tbody.appendChild(emptyRow);
+          } else {
+            docs.forEach(doc => {
+              const row = document.createElement('tr');
+
+              const titleTd = document.createElement('td');
+              const titleSpan = document.createElement('span');
+              titleSpan.className = 'dl-doc-title';
+              titleSpan.textContent = doc.title;
+              titleTd.appendChild(titleSpan);
+
+              const formatTd = document.createElement('td');
+              const badge = document.createElement('span');
+              badge.className = 'dl-badge';
+              badge.textContent = doc.format;
+              formatTd.appendChild(badge);
+
+              const sizeTd = document.createElement('td');
+              sizeTd.className = 'dl-size';
+              sizeTd.textContent = doc.size;
+
+              const dateTd = document.createElement('td');
+              dateTd.className = 'dl-date';
+              dateTd.textContent = new Date(doc.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+              const actionTd = document.createElement('td');
+              const dlBtn = document.createElement('a');
+              dlBtn.className = 'dl-btn';
+              dlBtn.href = doc.url;
+              dlBtn.setAttribute('aria-label', 'Download ' + doc.title);
+              const dlIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+              dlIcon.setAttribute('viewBox', '0 0 14 14');
+              dlIcon.setAttribute('fill', 'none');
+              dlIcon.setAttribute('stroke', 'currentColor');
+              dlIcon.setAttribute('stroke-width', '1.8');
+              dlIcon.setAttribute('width', '13');
+              dlIcon.setAttribute('height', '13');
+              const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+              path1.setAttribute('d', 'M7 1v8M4 6l3 3 3-3M2 11h10');
+              dlIcon.appendChild(path1);
+              const dlText = document.createTextNode(' Download');
+              dlBtn.append(dlIcon, dlText);
+              actionTd.appendChild(dlBtn);
+
+              row.append(titleTd, formatTd, sizeTd, dateTd, actionTd);
+              tbody.appendChild(row);
+            });
+          }
+
+          table.append(thead, tbody);
+          section.append(heading, table);
+          sectionsEl.appendChild(section);
+        });
+      }
+
+      buildSections('');
+
+      // Scroll-spy sidebar highlight
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            nav.querySelectorAll('a').forEach(a => {
+              a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+            });
+          }
+        });
+      }, { rootMargin: '-30% 0px -60% 0px' });
+
+      document.querySelectorAll('.dl-section').forEach(s => observer.observe(s));
+
+      searchInput.addEventListener('input', e => {
+        buildSections(e.target.value);
+        document.querySelectorAll('.dl-section').forEach(s => observer.observe(s));
+      });
+    })();
+  </script>
+</body>
+</html>

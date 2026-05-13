@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search — MDSU Ajmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .search-page-layout { padding-block: var(--space-8); }
+
+    .search-page-bar {
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--navy);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: var(--space-6);
+      background: var(--white);
+    }
+    .search-page-bar input {
+      flex: 1; border: none; outline: none;
+      padding: 14px 20px;
+      font-family: var(--font-body); font-size: 16px;
+      color: var(--ink); background: transparent;
+    }
+    .search-page-bar button {
+      padding: 14px 20px;
+      background: var(--navy); border: none; cursor: pointer;
+      color: var(--white); display: flex; align-items: center;
+      transition: background 0.15s;
+    }
+    .search-page-bar button:hover { background: var(--navy-dark); }
+
+    #result-count {
+      font-size: 14px; color: var(--ink-lt);
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .search-result {
+      padding: var(--space-5) 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .search-result:last-child { border-bottom: none; }
+    .result-cat {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--saffron);
+      margin-bottom: 5px;
+    }
+    .result-title {
+      font-family: var(--font-display);
+      font-size: 20px; font-weight: 600; margin-bottom: 5px;
+    }
+    .result-title a { color: var(--navy); text-decoration: none; transition: color 0.15s; }
+    .result-title a:hover { color: var(--saffron); }
+    .result-desc { font-size: 14px; color: var(--ink-lt); line-height: 1.6; }
+
+    .search-empty {
+      text-align: center;
+      padding: 64px 0;
+      color: var(--ink-lt);
+    }
+    .search-empty-icon { font-size: 40px; margin-bottom: var(--space-4); }
+    .search-empty h2 { font-family: var(--font-display); font-size: 22px; color: var(--ink); margin-bottom: var(--space-3); }
+    .search-empty p { font-size: 15px; }
+  </style>
+</head>
+<body>
+
+  <div class="util-bar">
+    <div class="container">
+      <div class="util-bar__left">
+        <span class="util-date">Wednesday, 13 May 2026</span>
+        <a href="index.html">Home</a>
+        <a href="#">Library</a>
+        <a href="contact.html">Contacts</a>
+      </div>
+      <div class="util-bar__right">
+        <div class="util-a11y" aria-label="Text size">
+          <a href="#" aria-label="Decrease text size">A-</a>
+          <a href="#" aria-label="Default text size">A</a>
+          <a href="#" aria-label="Increase text size">A+</a>
+        </div>
+        <div class="lang-toggle">
+          <a href="#" class="active">EN</a>
+          <a href="#">हि</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="site-logo" aria-label="MDSU — Home">
+          <div class="logo-emblem" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+          <div class="logo-text-group">
+            <span class="logo-name">Maharshi Dayanand Saraswati</span>
+            <span class="logo-name-hindi">महर्षि दयानंद सरस्वती विश्वविद्यालय</span>
+            <span class="logo-sub">University, Ajmer · Est. 1987</span>
+          </div>
+        </a>
+        <nav aria-label="Primary">
+          <ul class="primary-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="about.html">Vision &amp; Mission</a></li><li><a href="faculty.html">Faculty</a></li><li><a href="about.html">Administration</a></li></ul>
+            </li>
+            <li><a href="#">Academics <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="#">Academic Programs</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Academic Calendar</a></li></ul>
+            </li>
+            <li><a href="admissions.html">Students <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li><li><a href="downloads.html">Downloads</a></li></ul>
+            </li>
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <form class="search-form" role="search" action="search.html">
+            <input class="search-input" type="search" name="q" placeholder="Search…" aria-label="Search" />
+            <button class="search-btn" type="submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+            </button>
+          </form>
+          <button id="dark-mode-toggle" aria-label="Toggle dark mode" aria-pressed="false" style="background:none;border:1.5px solid var(--rule);border-radius:20px;padding:8px 12px;cursor:pointer;font-size:16px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;color:var(--ink-mid);transition:border-color 0.2s;">
+            <span class="dm-icon">&#9790;</span>
+          </button>
+          <a href="#" class="btn-login">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="4" r="2.5"/><path d="M1 12c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            Login
+          </a>
+          <button class="nav-toggle" aria-label="Open menu">
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span aria-current="page">Search</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="page-hero" aria-labelledby="page-heading">
+    <div class="container page-hero-content">
+      <p class="page-hero-eyebrow">Site Search</p>
+      <h1 class="page-title" id="page-heading">Search Results</h1>
+    </div>
+  </section>
+
+  <main style="background: var(--cream);">
+    <div class="container">
+      <div class="search-page-layout">
+
+        <form class="search-page-bar" role="search" id="search-page-form">
+          <input type="search" id="search-page-input" name="q" placeholder="Search MDSU…" aria-label="Search the site" autocomplete="off" />
+          <button type="submit" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+          </button>
+        </form>
+
+        <p id="result-count"></p>
+        <div id="search-results" aria-live="polite" aria-label="Search results"></div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-emblem" style="width:40px;height:40px;font-size:13px;" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--white);line-height:1.2;">MDS University</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Ajmer, Rajasthan</div>
+            </div>
+          </div>
+          <p class="footer-tagline">Shaping Minds, Building Futures since 1987.</p>
+          <address class="footer-address">
+            Pushkar Road, Ajmer<br/>
+            Rajasthan – 305009<br/>
+            <a href="tel:+911452787056">+91-145-278-7056</a>
+          </address>
+        </div>
+        <div>
+          <h3 class="footer-heading">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About MDSU</a></li>
+            <li><a href="admissions.html">Admissions</a></li>
+            <li><a href="exams.html">Exams &amp; Results</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Students</h3>
+          <ul class="footer-links">
+            <li><a href="admissions.html">Apply Now</a></li>
+            <li><a href="exams.html">Check Results</a></li>
+            <li><a href="#">Scholarships</a></li>
+            <li><a href="#">Academic Calendar</a></li>
+            <li><a href="#">Fee Structure</a></li>
+            <li><a href="#">Hostel</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">University</h3>
+          <ul class="footer-links">
+            <li><a href="affiliation.html">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+            <li><a href="#">IQAC</a></li>
+            <li><a href="#">RTI</a></li>
+            <li><a href="#">Tenders</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Maharshi Dayanand Saraswati University, Ajmer. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    async function initSearch() {
+      const params = new URLSearchParams(window.location.search);
+      let q = params.get('q') || '';
+
+      const input = document.getElementById('search-page-input');
+      const label = document.getElementById('result-count');
+      const container = document.getElementById('search-results');
+      const form = document.getElementById('search-page-form');
+      input.value = q;
+
+      let index = [];
+      try {
+        const res = await fetch('data/search-index.json');
+        index = await res.json();
+      } catch (e) {
+        label.textContent = 'Search index unavailable.';
+        return;
+      }
+
+      function runSearch(query) {
+        if (!query.trim()) return index;
+        const terms = query.toLowerCase().split(/\s+/);
+        return index.filter(item =>
+          terms.every(t =>
+            item.title.toLowerCase().includes(t) ||
+            item.desc.toLowerCase().includes(t) ||
+            item.keywords.toLowerCase().includes(t)
+          )
+        );
+      }
+
+      function render(results, query) {
+        const count = results.length;
+        if (query.trim()) {
+          label.textContent = count + ' result' + (count !== 1 ? 's' : '') + ' for “' + query + '”';
+        } else {
+          label.textContent = count + ' documents indexed';
+        }
+
+        container.replaceChildren();
+
+        if (count === 0) {
+          const wrap = document.createElement('div');
+          wrap.className = 'search-empty';
+
+          const icon = document.createElement('div');
+          icon.className = 'search-empty-icon';
+          icon.textContent = '🔍';
+
+          const heading = document.createElement('h2');
+          heading.textContent = 'No results found';
+
+          const msg = document.createElement('p');
+          msg.textContent = 'No results found for “' + query + '”. Try a different search term.';
+
+          wrap.append(icon, heading, msg);
+          container.appendChild(wrap);
+          return;
+        }
+
+        results.forEach(r => {
+          const article = document.createElement('article');
+          article.className = 'search-result';
+
+          const cat = document.createElement('div');
+          cat.className = 'result-cat';
+          cat.textContent = r.category;
+
+          const heading = document.createElement('h2');
+          heading.className = 'result-title';
+          const link = document.createElement('a');
+          link.href = r.url;
+          link.textContent = r.title;
+          heading.appendChild(link);
+
+          const desc = document.createElement('p');
+          desc.className = 'result-desc';
+          desc.textContent = r.desc;
+
+          article.append(cat, heading, desc);
+          container.appendChild(article);
+        });
+      }
+
+      render(runSearch(q), q);
+
+      input.addEventListener('input', e => {
+        const newQ = e.target.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('q', newQ);
+        window.history.replaceState({}, '', url);
+        render(runSearch(newQ), newQ);
+      });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        render(runSearch(input.value), input.value);
+      });
+    }
+
+    initSearch();
+  </script>
+</body>
+</html>

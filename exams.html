@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exams &amp; Results — MDSU Ajmer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .exams-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: var(--space-7);
+      padding-block: var(--space-8);
+      align-items: start;
+    }
+
+    /* Result search box */
+    .result-search-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+    h2.result-search-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: var(--space-2);
+    }
+    .result-search-desc {
+      font-size: 14px;
+      color: var(--ink-lt);
+      margin-bottom: var(--space-5);
+    }
+    .result-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: var(--space-3);
+      align-items: end;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-lt);
+    }
+    .form-input, .form-select {
+      padding: 11px 14px;
+      border: 1.5px solid var(--rule);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--ink);
+      background: var(--white);
+      transition: border-color 0.2s;
+      min-height: 44px;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--navy);
+    }
+    .form-select { cursor: pointer; }
+    .search-submit {
+      padding: 11px 24px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      min-height: 48px;
+      white-space: nowrap;
+    }
+    .search-submit:hover { background: var(--navy-mid); }
+
+    /* Exam tabs */
+    .exam-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--navy);
+      margin-bottom: var(--space-5);
+    }
+    .exam-tab {
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink-lt);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: var(--font-body);
+    }
+    .exam-tab.active { color: var(--navy); border-bottom-color: var(--navy); font-weight: 600; }
+    .exam-tab:hover:not(.active) { color: var(--ink); }
+    .exam-panel { display: none; }
+    .exam-panel.active { display: block; }
+
+    /* Notification list */
+    .notif-list { display: flex; flex-direction: column; gap: 0; }
+    .notif-item {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: var(--space-4);
+      align-items: center;
+      padding: var(--space-4) var(--space-5);
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-top: none;
+      transition: background 0.15s;
+    }
+    .notif-item:first-child { border-top: 1px solid var(--rule); border-radius: var(--radius) var(--radius) 0 0; }
+    .notif-item:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+    .notif-item:hover { background: var(--cream); }
+
+    .notif-date-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--cream);
+      border-radius: var(--radius-sm);
+      padding: 6px 4px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .notif-date-day {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .notif-date-mon {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--saffron);
+    }
+
+    .notif-body {}
+    h3.notif-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 3px;
+      line-height: 1.4;
+    }
+    h3.notif-title a { transition: color 0.15s; }
+    h3.notif-title a:hover { color: var(--navy); text-decoration: underline; }
+    .notif-sub { font-size: 12px; color: var(--ink-lt); }
+
+    .notif-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 2px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .notif-badge--result { background: #E3F2FD; color: #0D47A1; }
+    .notif-badge--schedule { background: #E8F5E9; color: #1B5E20; }
+    .notif-badge--admit { background: var(--saffron-bg); color: #7A4E00; }
+    .notif-badge--new {
+      background: var(--navy);
+      color: var(--white);
+      margin-left: var(--space-2);
+      vertical-align: middle;
+    }
+
+    /* Sidebar */
+    .sidebar-widget {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: var(--space-5);
+    }
+    .widget-head {
+      padding: var(--space-4) var(--space-5);
+      background: var(--navy);
+    }
+    h3.widget-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .widget-body { padding: var(--space-4) var(--space-5); }
+
+    .quick-check-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .quick-check-form .form-input {
+      font-size: 13px;
+    }
+    .quick-check-btn {
+      padding: 11px;
+      background: var(--saffron);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      min-height: 44px;
+    }
+    .quick-check-btn:hover { background: var(--saffron-lt); }
+
+    .exam-schedule-item {
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--space-2);
+      align-items: start;
+    }
+    .exam-schedule-item:last-child { border-bottom: none; }
+    .exam-schedule-name { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.3; }
+    .exam-schedule-date { font-size: 11px; color: var(--saffron); font-weight: 600; white-space: nowrap; }
+    .exam-schedule-status {
+      font-size: 10px;
+      color: var(--ink-lt);
+      margin-top: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .exams-layout { grid-template-columns: 1fr; }
+      .result-form { grid-template-columns: 1fr 1fr; }
+      .result-form .search-submit { grid-column: span 2; }
+    }
+    @media (max-width: 500px) {
+      .result-form { grid-template-columns: 1fr; }
+      .result-form .search-submit { grid-column: auto; }
+      .notif-item { grid-template-columns: 50px 1fr; }
+      .notif-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Util bar -->
+  <div class="util-bar">
+    <div class="container">
+      <div class="util-bar__left">
+        <span class="util-date">Wednesday, 13 May 2026</span>
+        <a href="index.html">Home</a>
+        <a href="#">Library</a>
+        <a href="#">Contacts</a>
+      </div>
+      <div class="util-bar__right">
+        <div class="util-a11y" aria-label="Text size">
+          <a href="#" aria-label="Decrease text size">A-</a>
+          <a href="#" aria-label="Default text size">A</a>
+          <a href="#" aria-label="Increase text size">A+</a>
+        </div>
+        <div class="lang-toggle">
+          <a href="#" class="active">EN</a>
+          <a href="#">हि</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="site-logo" aria-label="MDSU — Home">
+          <div class="logo-emblem" aria-hidden="true"><span class="logo-emblem-text">MDS</span></div>
+          <div class="logo-text-group">
+            <span class="logo-name">Maharshi Dayanand Saraswati</span>
+            <span class="logo-name-hindi">महर्षि दयानंद सरस्वती विश्वविद्यालय</span>
+            <span class="logo-sub">University, Ajmer · Est. 1987</span>
+          </div>
+        </a>
+        <nav aria-label="Primary">
+          <ul class="primary-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">About <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="about.html">About MDSU</a></li><li><a href="#">Vision &amp; Mission</a></li><li><a href="#">Faculty</a></li></ul>
+            </li>
+            <li><a href="#">Academics <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="#">Academic Programs</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Academic Calendar</a></li></ul>
+            </li>
+            <li><a href="exams.html" class="active">Students <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></a>
+              <ul class="dropdown"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li><li><a href="#">Downloads</a></li></ul>
+            </li>
+            <li><a href="#">Affiliation</a></li>
+            <li><a href="#">Research</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <form class="search-form" role="search" action="search.html">
+            <input class="search-input" type="search" name="q" placeholder="Search…" aria-label="Search" />
+            <button class="search-btn" type="submit" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+            </button>
+          </form>
+          <button id="dark-mode-toggle" aria-label="Toggle dark mode" aria-pressed="false" style="background:none;border:1.5px solid var(--rule);border-radius:20px;padding:8px 12px;cursor:pointer;font-size:16px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;color:var(--ink-mid);transition:border-color 0.2s;">
+            <span class="dm-icon">&#9790;</span>
+          </button>
+          <a href="#" class="btn-login">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="4" r="2.5"/><path d="M1 12c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            Login
+          </a>
+          <button class="nav-toggle" aria-label="Open menu">
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1h16M1 7h16M1 13h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <a href="#">Students</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span aria-current="page">Exams &amp; Results</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Page hero -->
+  <section class="page-hero" aria-labelledby="page-heading">
+    <div class="container page-hero-content">
+      <p class="page-hero-eyebrow">Academic Year 2025–26</p>
+      <h1 class="page-title" id="page-heading">Exams &amp; Results</h1>
+      <p class="page-hero-desc">Exam schedules, admit cards, result notifications, and mark sheet downloads for all programmes.</p>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main style="background: var(--cream);">
+    <div class="container">
+      <div class="exams-layout">
+
+        <section>
+          <!-- Result search -->
+          <div class="result-search-card">
+            <h2 class="result-search-title">Check Your Result</h2>
+            <p class="result-search-desc">Enter your enrollment number and select exam year to view your result.</p>
+            <form class="result-form" action="#" method="get">
+              <div class="form-group">
+                <label class="form-label" for="enrollment">Enrollment No.</label>
+                <input class="form-input" type="text" id="enrollment" name="enrollment" placeholder="e.g. 2024XXXXX" autocomplete="off" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="exam-year">Exam Year</label>
+                <select class="form-select" id="exam-year" name="year">
+                  <option value="">Select year…</option>
+                  <option value="2026">2025–26</option>
+                  <option value="2025">2024–25</option>
+                  <option value="2024">2023–24</option>
+                  <option value="2023">2022–23</option>
+                </select>
+              </div>
+              <button type="submit" class="search-submit">View Result →</button>
+            </form>
+          </div>
+
+          <!-- Tabs -->
+          <div class="exam-tabs" role="tablist" aria-label="Exam categories">
+            <button class="exam-tab active" role="tab" aria-selected="true" aria-controls="panel-results" id="tab-results">Results</button>
+            <button class="exam-tab" role="tab" aria-selected="false" aria-controls="panel-schedules" id="tab-schedules">Exam Schedules</button>
+            <button class="exam-tab" role="tab" aria-selected="false" aria-controls="panel-admitcards" id="tab-admitcards">Admit Cards</button>
+            <button class="exam-tab" role="tab" aria-selected="false" aria-controls="panel-notifications" id="tab-notifications">Notifications</button>
+          </div>
+
+          <!-- Results panel -->
+          <div id="panel-results" class="exam-panel active" role="tabpanel" aria-labelledby="tab-results">
+            <div class="notif-list">
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">10</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">MA Final Year (All Subjects) Result 2025–26 <span class="notif-badge notif-badge--new">New</span></a></h3>
+                  <div class="notif-sub">Arts Faculty · Published 10 May 2026</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Result</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">05</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">M.Sc. (Physics, Chemistry, Maths) Final Year Result 2025–26</a></h3>
+                  <div class="notif-sub">Science Faculty · Published 5 May 2026</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Result</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">28</span><span class="notif-date-mon">Apr</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">B.Com Final Year Result 2025–26</a></h3>
+                  <div class="notif-sub">Commerce Faculty · Published 28 Apr 2026</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Result</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">20</span><span class="notif-date-mon">Apr</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">MBA Semester 4 Result 2025–26</a></h3>
+                  <div class="notif-sub">Management Faculty · Published 20 Apr 2026</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Result</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">15</span><span class="notif-date-mon">Apr</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">LLB (3-Year) Final Year Result 2025–26</a></h3>
+                  <div class="notif-sub">Law Faculty · Published 15 Apr 2026</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Result</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">08</span><span class="notif-date-mon">Apr</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">B.Ed. Result 2025–26 (All Semesters)</a></h3>
+                  <div class="notif-sub">Education Faculty · Published 8 Apr 2026</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Result</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Schedules panel -->
+          <div id="panel-schedules" class="exam-panel" role="tabpanel" aria-labelledby="tab-schedules" hidden>
+            <div class="notif-list">
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">12</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">Annual Exam Schedule 2025–26 — UG (All Faculties) <span class="notif-badge notif-badge--new">New</span></a></h3>
+                  <div class="notif-sub">Exams begin: June 2026</div>
+                </div>
+                <span class="notif-badge notif-badge--schedule">Schedule</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">10</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">PG Semester Exam Schedule 2025–26 (Science)</a></h3>
+                  <div class="notif-sub">M.Sc. all disciplines · Exams: June 2026</div>
+                </div>
+                <span class="notif-badge notif-badge--schedule">Schedule</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">08</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">MBA / MCA Semester Exam Schedule 2025–26</a></h3>
+                  <div class="notif-sub">Management &amp; Computer Applications</div>
+                </div>
+                <span class="notif-badge notif-badge--schedule">Schedule</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admit cards panel -->
+          <div id="panel-admitcards" class="exam-panel" role="tabpanel" aria-labelledby="tab-admitcards" hidden>
+            <div class="notif-list">
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">14</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">Admit Card — UG Annual Exam 2026 <span class="notif-badge notif-badge--new">New</span></a></h3>
+                  <div class="notif-sub">Download from student portal with enrollment number</div>
+                </div>
+                <span class="notif-badge notif-badge--admit">Admit Card</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">12</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">Admit Card — PG Semester Exam June 2026</a></h3>
+                  <div class="notif-sub">M.A., M.Sc., M.Com., MBA all semesters</div>
+                </div>
+                <span class="notif-badge notif-badge--admit">Admit Card</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notifications panel -->
+          <div id="panel-notifications" class="exam-panel" role="tabpanel" aria-labelledby="tab-notifications" hidden>
+            <div class="notif-list">
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">13</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">Instructions for Online Result Verification 2025–26</a></h3>
+                  <div class="notif-sub">Controller of Examinations · MDSU</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Notice</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">09</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">Re-evaluation / Re-checking Application Window Open</a></h3>
+                  <div class="notif-sub">Apply within 15 days of result declaration</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Notice</span>
+              </div>
+              <div class="notif-item">
+                <div class="notif-date-block"><span class="notif-date-day">01</span><span class="notif-date-mon">May</span></div>
+                <div class="notif-body">
+                  <h3 class="notif-title"><a href="#">Circular: Use of Fair Means in Examinations 2025–26</a></h3>
+                  <div class="notif-sub">All students and invigilators</div>
+                </div>
+                <span class="notif-badge notif-badge--result">Notice</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside aria-label="Exam quick access">
+
+          <div class="sidebar-widget">
+            <div class="widget-head"><h3 class="widget-title">Quick Result Check</h3></div>
+            <div class="widget-body">
+              <form class="quick-check-form" action="#" method="get">
+                <div class="form-group">
+                  <label class="form-label" for="q-enrollment">Enrollment No.</label>
+                  <input class="form-input" type="text" id="q-enrollment" placeholder="2024XXXXX" style="font-size:13px;" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="q-year">Year</label>
+                  <select class="form-select" id="q-year" style="font-size:13px;">
+                    <option value="2026">2025–26</option>
+                    <option value="2025">2024–25</option>
+                    <option value="2024">2023–24</option>
+                  </select>
+                </div>
+                <button type="submit" class="quick-check-btn">Check Result →</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="sidebar-widget">
+            <div class="widget-head"><h3 class="widget-title">Upcoming Exams</h3></div>
+            <div class="widget-body">
+              <div class="exam-schedule-item">
+                <div>
+                  <div class="exam-schedule-name">UG Annual Exam 2026</div>
+                  <div class="exam-schedule-status">All faculties</div>
+                </div>
+                <div class="exam-schedule-date">June 2026</div>
+              </div>
+              <div class="exam-schedule-item">
+                <div>
+                  <div class="exam-schedule-name">PG Semester Exam</div>
+                  <div class="exam-schedule-status">Science &amp; Arts</div>
+                </div>
+                <div class="exam-schedule-date">June 2026</div>
+              </div>
+              <div class="exam-schedule-item">
+                <div>
+                  <div class="exam-schedule-name">MBA / MCA Semester</div>
+                  <div class="exam-schedule-status">Mgmt Faculty</div>
+                </div>
+                <div class="exam-schedule-date">Jul 2026</div>
+              </div>
+              <div class="exam-schedule-item">
+                <div>
+                  <div class="exam-schedule-name">B.Ed. Practical Exam</div>
+                  <div class="exam-schedule-status">Education Faculty</div>
+                </div>
+                <div class="exam-schedule-date">Jul 2026</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-widget">
+            <div class="widget-head"><h3 class="widget-title">Downloads</h3></div>
+            <div class="widget-body">
+              <ul style="display:flex;flex-direction:column;gap:0;--rule:#E8E2DA;">
+                <li style="border-bottom:1px solid var(--rule);padding-block:10px;"><a href="#" style="font-size:13px;color:var(--navy);display:flex;align-items:center;gap:8px;">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v8M4 6l3 3 3-3"/><path d="M2 11h10"/></svg>
+                  Mark Sheet (PDF)</a></li>
+                <li style="border-bottom:1px solid var(--rule);padding-block:10px;"><a href="#" style="font-size:13px;color:var(--navy);display:flex;align-items:center;gap:8px;">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v8M4 6l3 3 3-3"/><path d="M2 11h10"/></svg>
+                  Migration Certificate</a></li>
+                <li style="border-bottom:1px solid var(--rule);padding-block:10px;"><a href="#" style="font-size:13px;color:var(--navy);display:flex;align-items:center;gap:8px;">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v8M4 6l3 3 3-3"/><path d="M2 11h10"/></svg>
+                  Provisional Certificate</a></li>
+                <li style="padding-block:10px;"><a href="#" style="font-size:13px;color:var(--navy);display:flex;align-items:center;gap:8px;">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v8M4 6l3 3 3-3"/><path d="M2 11h10"/></svg>
+                  Re-evaluation Form</a></li>
+              </ul>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="footer-logo-name">MDS University, Ajmer</div>
+          <p>Maharshi Dayanand Saraswati University is a public university in Ajmer, Rajasthan. Established in 1987.</p>
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Facebook">f</a>
+            <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+            <a href="#" class="social-link" aria-label="Instagram">in</a>
+            <a href="#" class="social-link" aria-label="YouTube">▶</a>
+          </div>
+        </div>
+        <div><h3 class="footer-col-title">Academics</h3><ul class="footer-links"><li><a href="#">Academic Programs</a></li><li><a href="#">Fee Structure</a></li><li><a href="#">Central Library</a></li></ul></div>
+        <div><h3 class="footer-col-title">Students</h3><ul class="footer-links"><li><a href="admissions.html">Admissions</a></li><li><a href="exams.html">Exams &amp; Results</a></li><li><a href="#">Scholarships</a></li></ul></div>
+        <div><h3 class="footer-col-title">University</h3><ul class="footer-links"><li><a href="#">Anti-Ragging</a></li><li><a href="#">Grievance</a></li><li><a href="#">RTI</a></li><li><a href="#">NIRF</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Maharshi Dayanand Saraswati University, Ajmer.</span>
+        <nav class="footer-bottom-links"><a href="#">Privacy</a><a href="#">Accessibility</a><a href="#">Sitemap</a></nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

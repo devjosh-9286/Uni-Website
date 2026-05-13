@@ -1,0 +1,14 @@
+[
+  { "id": 1, "name": "Prof. Rajesh Kumar Sharma", "dept": "Mathematics", "role": "Professor & Head", "specialization": "Number Theory, Abstract Algebra", "email": "hod.maths@mdsuajmer.ac.in", "initial": "RK" },
+  { "id": 2, "name": "Dr. Sunita Agarwal", "dept": "Physics", "role": "Associate Professor", "specialization": "Quantum Mechanics, Spectroscopy", "email": "sunita.physics@mdsuajmer.ac.in", "initial": "SA" },
+  { "id": 3, "name": "Prof. Mahesh Chandra Gupta", "dept": "Chemistry", "role": "Professor & Head", "specialization": "Organic Chemistry, Drug Synthesis", "email": "hod.chem@mdsuajmer.ac.in", "initial": "MC" },
+  { "id": 4, "name": "Dr. Priya Singh", "dept": "Economics", "role": "Assistant Professor", "specialization": "Macroeconomics, Development Economics", "email": "priya.eco@mdsuajmer.ac.in", "initial": "PS" },
+  { "id": 5, "name": "Prof. Vinod Kumar Joshi", "dept": "Management Studies", "role": "Professor & Director", "specialization": "Strategic Management, Finance", "email": "director.mba@mdsuajmer.ac.in", "initial": "VK" },
+  { "id": 6, "name": "Dr. Kavita Meena", "dept": "Botany", "role": "Associate Professor", "specialization": "Plant Ecology, Ethnobotany", "email": "kavita.botany@mdsuajmer.ac.in", "initial": "KM" },
+  { "id": 7, "name": "Prof. Anil Verma", "dept": "Law", "role": "Professor & Dean", "specialization": "Constitutional Law, IPR", "email": "dean.law@mdsuajmer.ac.in", "initial": "AV" },
+  { "id": 8, "name": "Dr. Seema Rajput", "dept": "Pharmacy", "role": "Associate Professor", "specialization": "Pharmaceutics, Drug Delivery", "email": "seema.pharmacy@mdsuajmer.ac.in", "initial": "SR" },
+  { "id": 9, "name": "Prof. Deepak Sharma", "dept": "Computer Science", "role": "Professor & Head", "specialization": "Machine Learning, Distributed Systems", "email": "hod.cs@mdsuajmer.ac.in", "initial": "DS" },
+  { "id": 10, "name": "Dr. Anita Yadav", "dept": "Environmental Sciences", "role": "Assistant Professor", "specialization": "Climate Change, Pollution Control", "email": "anita.env@mdsuajmer.ac.in", "initial": "AY" },
+  { "id": 11, "name": "Prof. Ramesh Chand Pareek", "dept": "History", "role": "Professor & Head", "specialization": "Medieval Indian History, Rajasthan Studies", "email": "hod.history@mdsuajmer.ac.in", "initial": "RC" },
+  { "id": 12, "name": "Dr. Nirmala Suthar", "dept": "Education", "role": "Associate Professor", "specialization": "Curriculum Design, Educational Psychology", "email": "nirmala.edu@mdsuajmer.ac.in", "initial": "NS" }
+]
